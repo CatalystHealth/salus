@@ -1,4 +1,4 @@
-import { MixedSchema, BaseSchema } from '@trpc/schema'
+import { MixedSchema, BaseSchema } from '@tsio/schema'
 import { ReferenceObject, SchemaObject } from 'openapi3-ts'
 
 import { SchemaConverter } from '.'

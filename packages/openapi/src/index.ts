@@ -1,4 +1,4 @@
-import { Schema } from '@trpc/schema'
+import { Schema } from '@tsio/schema'
 import { OpenAPIObject, SchemaObject } from 'openapi3-ts'
 
 import { SchemaConverterContext } from './registry'

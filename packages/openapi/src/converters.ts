@@ -14,7 +14,7 @@ import {
   StringSchema,
   UndefinedSchema,
   UnionSchema
-} from '@trpc/schema'
+} from '@tsio/schema'
 
 import { createSimpleConverter, mapRefinement } from './converter'
 

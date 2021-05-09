@@ -1,4 +1,4 @@
-import * as s from '@trpc/schema'
+import * as s from '@tsio/schema'
 import * as util from 'util'
 
 import { defaultConverters } from './converters'
