@@ -1,0 +1,23 @@
+{
+  "include": ["packages/**/*.ts", "jest/**/*.ts"],
+  "compilerOptions": {
+    "outDir": "build",
+    "strict": true,
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+    "strictNullChecks": true,
+    "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "commonjs",
+    "target": "es2017",
+    "lib": ["es5", "dom", "es2015", "es2019", "esnext.array", "esnext"],
+    "baseUrl": ".",
+    "paths": {
+      "@trpc/*": ["packages/*/src"]
+    }
+  }
+}

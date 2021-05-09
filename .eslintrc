@@ -1,0 +1,70 @@
+{
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "import", "prettier"],
+  "overrides": [
+    {
+      "files": "*.d.ts",
+      "rules": {
+        "@typescript-eslint/no-empty-interface": ["off"],
+        "@typescript-eslint/ban-types": ["off"],
+        "quotes": ["off"],
+        "import/order": ["off"]
+      }
+    },
+    {
+      "files": "*.js",
+      "rules": {
+        "@typescript-eslint/no-var-requires": ["off"]
+      }
+    },
+    {
+      "files": ["*test.ts", "*.e2e.ts"],
+      "rules": {
+        "@typescript-eslint/unbound-method": ["off"],
+        "@typescript-eslint/no-non-null-assertion": ["off"],
+      }
+    }
+  ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
+  "env": {
+    "node": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:import/errors",
+    "plugin:import/warnings",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:import/typescript"
+  ],
+  "ignorePatterns": ["newrelic.js"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-console": 2,
+    "indent": "off",
+    "quotes": ["error", "single", { "avoidEscape": true }],
+    "eqeqeq": ["error", "always"],
+    "@typescript-eslint/no-unused-vars": ["error", { "args": "all", "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-inferrable-types": [
+      "error",
+      { "ignoreProperties": true, "ignoreParameters": true }
+    ],
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unnecessary-condition": ["error"],
+    "@typescript-eslint/no-extra-semi": ["off"],
+    "@typescript-eslint/no-non-null-assertion": ["error"],
+    "import/order": [
+      "error",
+      {
+        "groups": [["builtin", "external"], "parent", "sibling", "index", "internal"],
+        "newlines-between": "always",
+        "alphabetize": {
+          "order": "asc"
+        }
+      }
+    ]
+  }
+}

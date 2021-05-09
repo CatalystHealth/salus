@@ -1,0 +1,8 @@
+{
+  "name": "@trpc/openapi",
+  "version": "1.0.0",
+  "license": "MIT",
+  "devDependencies": {
+    "openapi3-ts": "^2.0.1"
+  }
+}
