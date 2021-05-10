@@ -1,9 +1,23 @@
 {
   "name": "@tsio/schema",
-  "version": "0.0.2-alpha.2",
+  "version": "0.0.2-alpha.3",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CatalystHealth/tsio.git"
+  },
+  "keywords": [
+    "schema",
+    "typesafe",
+    "encoding",
+    "decoding",
+    "io",
+    "serialization",
+    "deserialization",
+    "json"
+  ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json"
   }
