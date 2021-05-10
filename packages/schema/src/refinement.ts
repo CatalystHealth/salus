@@ -1,3 +1,5 @@
+export type Constraint<A, P = void> = (value: A, args: P) => boolean
+
 export type Refinement<A, P> = {
   constraint: Constraint<A, P>
   type?: string
@@ -6,5 +8,3 @@ export type Refinement<A, P> = {
 }
 
 export type RefinementOptions<A, P> = Omit<Refinement<A, P>, 'constraint'>
-
-export type Constraint<A, P = void> = (value: A, args: P) => boolean

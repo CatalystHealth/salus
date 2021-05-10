@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "build",
     "strict": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
@@ -14,11 +15,13 @@
     "target": "es2017",
     "lib": ["es5", "dom", "es2015", "es2019", "esnext.array", "esnext"],
     "baseUrl": ".",
+    "declaration": true,
     "paths": {
       "@tsio/*": ["packages/*/src"]
     }
   },
   "exclude": [
-    "**/node_modules"
+    "**/node_modules",
+    "**/*.spec.ts"
   ]
 }

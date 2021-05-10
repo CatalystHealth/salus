@@ -35,7 +35,7 @@ export class EnumSchema<E extends string> extends BaseSchema<E, string> {
     }
 
     if (!this.enumValues.has(value)) {
-      return failure(context, value, `must be one of: ${[...this.enumValues].join(', ')}'`)
+      return failure(context, value, `must be one of: ${[...this.enumValues].join(', ')}`)
     }
 
     return success(value as E)

@@ -1,6 +1,6 @@
 {
   "name": "@tsio/openapi",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "license": "MIT",
   "devDependencies": {
     "openapi3-ts": "^2.0.1"

@@ -26,7 +26,7 @@ export class LiteralSchema<E extends string> extends BaseSchema<E, E> {
    * @returns the validation result
    */
   protected decodeInternal(value: unknown, context: Context): Validation<E> {
-    if (typeof value !== this.value) {
+    if (value !== this.value) {
       return failure(context, value, `must be ${this.value}`)
     }
 
