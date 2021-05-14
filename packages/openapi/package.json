@@ -4,5 +4,8 @@
   "license": "MIT",
   "devDependencies": {
     "openapi3-ts": "^2.0.1"
+  },
+  "scripts": {
+    "test": "jest --config ../../jest.config.js"
   }
 }

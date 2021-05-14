@@ -26,6 +26,11 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/typescript"
   ],
+  "settings": {
+    "import/resolver": {
+      "typescript": {}
+    }
+  },
   "rules": {
     "prettier/prettier": "error",
     "no-console": 2,

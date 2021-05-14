@@ -14,7 +14,7 @@ expect.extend({
 
     return {
       pass: fastDeepEqual(validation.value, expected),
-      message: () => ''
+      message: () => `expected ${validation.value as string} to equal ${expected as string}`
     }
   },
   toHaveValidationFailure: (value: Validation<unknown>, path: string[], message: string) => {

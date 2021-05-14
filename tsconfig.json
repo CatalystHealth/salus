@@ -14,8 +14,9 @@
     "target": "es2017",
     "lib": ["es5", "dom", "es2015", "es2019", "esnext.array", "esnext"],
     "baseUrl": ".",
+    "isolatedModules": true,
     "paths": {
-      "@tsio/*": ["packages/*/src"]
+      "@tsio/*": ["./packages/*/src"]
     }
   },
   "exclude": [

@@ -1,5 +1,5 @@
 {
-  "name": "@tsio/schema",
+  "name": "@tsio/codec",
   "version": "0.0.2-alpha.3",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -22,8 +22,5 @@
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "test": "jest"
-  },
-  "devDependencies": {
-    "@types/json-schema": "^7.0.7"
   }
 }

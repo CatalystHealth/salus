@@ -1,47 +1,56 @@
-import { Schema } from '@tsio/schema'
-import { OpenAPIObject, SchemaObject } from 'openapi3-ts'
+import * as io from '@tsio/codec/src'
+import * as util from 'util'
 
-import { SchemaConverterContext } from './registry'
+import { OpenAPIBuilder } from './builder'
+import { postOperation } from './operation'
 
-export type ConverterChain = () => SchemaObject
-export type ConverterHandler = (
-  schema: Schema<unknown>,
-  registry: SchemaConverterContext,
-  next: ConverterChain
-) => SchemaObject
+const CreateUserParams = io.object({
+  first_name: io.string,
+  last_name: io.string
+})
 
-export interface SchemaConverter {
-  convert: ConverterHandler
-}
+const UserResource = io.object({
+  object: io.literal('user').document({
+    description: 'Always `user`'
+  }),
+  first_name: io.string.document({
+    description: 'First name for the user',
+    example: 'Colin'
+  }),
+  last_name: io.string.document({
+    description: 'Last name for the user',
+    example: 'Morelli'
+  })
+})
 
-export class OpenAPIGenerator {
-  private readonly schemas: Schema<unknown>[] = []
-  private readonly converterContext: SchemaConverterContext
+const UpdateUserPathParams = io.object({
+  id: io.string.document({
+    description: 'Unique ID for the user to update'
+  })
+})
 
-  constructor(converters: SchemaConverter[] = []) {
-    this.converterContext = new SchemaConverterContext(converters)
+const GlobalQueryParams = io.object({
+  expand: io.array(io.string).document({
+    description: 'Properties to expand on the response'
+  })
+})
+
+const UpdateUserOperation = postOperation('/v1/users/{id}', {
+  description: 'Creates a new user',
+  params: UpdateUserPathParams,
+  query: GlobalQueryParams,
+  body: CreateUserParams,
+  response: UserResource
+})
+
+const generator = OpenAPIBuilder.create({
+  info: {
+    version: '1.0',
+    title: 'Catalyst API'
   }
+}).addServer({
+  url: 'https://api.withcatalyst.com/v1',
+  description: 'Production Server'
+})
 
-  public schema(schema: Schema<unknown>): this {
-    this.schemas.push(schema)
-    return this
-  }
-
-  public generate(): OpenAPIObject {
-    for (const schema of this.schemas) {
-      const result = this.converterContext.resolve(schema)
-    }
-
-    return {
-      openapi: '3.1.0',
-      info: {
-        title: 'Test',
-        version: '1.0.0'
-      },
-      paths: {},
-      components: {
-        schemas: this.converterContext.knownSchemas()
-      }
-    }
-  }
-}
+console.log(util.inspect(generator.operation(UpdateUserOperation).build(), false, 20, true))
