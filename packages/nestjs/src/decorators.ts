@@ -54,13 +54,14 @@ export function Operation(operation: ApiOperation): MethodDecorator {
     target: Object,
     propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<T>
-  ): void => {
+  ): TypedPropertyDescriptor<T> | void => {
     Reflect.defineMetadata(
       OPERATION_METADATA_KEY,
       operation,
       (target as Record<string | symbol, unknown>)[propertyKey as string] as Object
     )
-    decorator(target, propertyKey, descriptor)
+
+    return decorator(target, propertyKey, descriptor)
   }
 }
 
