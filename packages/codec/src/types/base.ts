@@ -3,6 +3,8 @@ import { Context } from '../context'
 import { Constraint, Refinement, RefinementOptions } from '../refinement'
 import { Validation } from '../validation'
 
+import { OptionalCodec, NullableCodec } from './'
+
 export interface CodecOptions<A> {
   /**
    * Well known name for this codec
@@ -95,6 +97,24 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
       ...this.options,
       ...options
     }) as this
+  }
+
+  /**
+   * Creates a new codec that allows an optional value
+   *
+   * @returns a new codec which allows the property to be optional
+   */
+  public optional(): OptionalCodec<A, O> {
+    return new OptionalCodec(this)
+  }
+
+  /**
+   * Creates a new codec that allows a null value
+   *
+   * @returns a new codec which allows the property to be optional
+   */
+  public nullable(): NullableCodec<A, O> {
+    return new NullableCodec(this)
   }
 
   /**

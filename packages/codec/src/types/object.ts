@@ -1,21 +1,33 @@
 import { Context } from '../context'
 import { Any, OutputOf, TypeOf } from '../infer'
-import { isRecord } from '../utils'
+import { isRecord, Optionalize, OptionalKeys } from '../utils'
 import { failure, ValidationError, Validation, failures, success } from '../validation'
 
-import { BaseCodec, CodecOptions } from './'
+import { BaseCodec, CodecOptions, OptionalCodec } from './'
+
+export type Partialize<P extends Props> = {
+  [K in keyof P]: P[K] extends OptionalCodec<any, any>
+    ? P[K]
+    : OptionalCodec<P[K]['_A'], P[K]['_O']>
+}
 
 export type Props = {
   [key: string]: Any
 }
 
-export type TypeOfProps<P extends Props> = {
-  [K in keyof P]: TypeOf<P[K]>
-}
+export type TypeOfProps<P extends Props> = Optionalize<
+  {
+    [K in keyof P]: TypeOf<P[K]>
+  },
+  OptionalKeys<P>
+>
 
-export type OutputOfProps<P extends Props> = {
-  [K in keyof P]: OutputOf<P[K]>
-}
+export type OutputOfProps<P extends Props> = Optionalize<
+  {
+    [K in keyof P]: OutputOf<P[K]>
+  },
+  OptionalKeys<P>
+>
 
 export class ObjectCodec<P extends Props> extends BaseCodec<TypeOfProps<P>, OutputOfProps<P>> {
   public readonly _tag = 'ObjectCodec' as const
@@ -28,7 +40,9 @@ export class ObjectCodec<P extends Props> extends BaseCodec<TypeOfProps<P>, Outp
     // Cache the well-known set of keys
     const cachedKeys = Object.keys(props)
     this.properties = new Set([...cachedKeys])
-    this.requiredProperties = new Set([...cachedKeys])
+    this.requiredProperties = new Set([
+      ...cachedKeys.filter((key) => this.props[key]._tag !== 'OptionalCodec')
+    ])
   }
 
   protected doIs(value: unknown, context: Context): value is TypeOfProps<P> {
@@ -103,5 +117,20 @@ export class ObjectCodec<P extends Props> extends BaseCodec<TypeOfProps<P>, Outp
 
   protected with(options: CodecOptions<TypeOfProps<P>>): ObjectCodec<P> {
     return new ObjectCodec(this.props, options)
+  }
+
+  public partial(): ObjectCodec<Partialize<P>> {
+    return ObjectCodec.partial(this.props)
+  }
+
+  public static partial<P extends Props>(props: P): ObjectCodec<Partialize<P>> {
+    return new ObjectCodec(
+      Object.fromEntries(
+        Object.entries(props).map(([key, child]) => [
+          key,
+          child instanceof OptionalCodec ? child : new OptionalCodec(child)
+        ])
+      )
+    ) as ObjectCodec<Partialize<P>>
   }
 }

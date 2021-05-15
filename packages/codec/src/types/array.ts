@@ -2,7 +2,7 @@ import { Codec } from '../codec'
 import { Context } from '../context'
 import { failure, failures, success, Validation, ValidationError } from '../validation'
 
-import { BaseCodec, CodecOptions } from './base'
+import { BaseCodec, CodecOptions } from './'
 
 export class ArrayCodec<A, O = A> extends BaseCodec<A[], O[]> {
   readonly _tag = 'ArrayCodec' as const

@@ -1,3 +1,13 @@
+import { OptionalCodec } from './types'
+
+export type OptionalKeys<T extends object> = {
+  [K in keyof T]: T[K] extends OptionalCodec<any, any> ? K : never
+}[keyof T]
+export type Optionalize<T extends object, O extends keyof T> = {
+  [K in Exclude<keyof T, O>]: T[K]
+} &
+  { [K in O]?: T[K] }
+
 /**
  * Checks if an object is a generic record
  *

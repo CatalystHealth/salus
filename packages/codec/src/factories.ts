@@ -6,21 +6,35 @@ import {
   LiteralCodec,
   ObjectCodec,
   Props,
-  BooleanCodec
+  BooleanCodec,
+  EnumCodec,
+  Partialize,
+  DateCodec
 } from './types'
 
-export const string = new StringCodec()
-export const number = new NumberCodec()
-export const boolean = new BooleanCodec()
+const boolean = new BooleanCodec()
+const date = new DateCodec()
+const number = new NumberCodec()
+const string = new StringCodec()
 
-export function literal<T extends string>(value: T): LiteralCodec<T> {
+function enumFactory<T extends string>(value: Record<string, T>): EnumCodec<T> {
+  return new EnumCodec(value)
+}
+
+function literal<T extends string>(value: T): LiteralCodec<T> {
   return new LiteralCodec(value)
 }
 
-export function array<A, O>(codec: Codec<A, O>): ArrayCodec<A, O> {
+function array<A, O>(codec: Codec<A, O>): ArrayCodec<A, O> {
   return new ArrayCodec(codec)
 }
 
-export function object<P extends Props>(props: P): ObjectCodec<P> {
+function object<P extends Props>(props: P): ObjectCodec<P> {
   return new ObjectCodec(props)
 }
+
+function partial<P extends Props>(codec: P): ObjectCodec<Partialize<P>> {
+  return ObjectCodec.partial(codec)
+}
+
+export { array, boolean, date, enumFactory as enum, literal, number, object, partial, string }

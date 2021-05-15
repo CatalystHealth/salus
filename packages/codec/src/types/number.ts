@@ -1,7 +1,7 @@
 import { Context } from '../context'
 import { failure, success, Validation } from '../validation'
 
-import { BaseCodec, CodecOptions } from './base'
+import { BaseCodec, CodecOptions } from './'
 
 export class NumberCodec extends BaseCodec<number> {
   readonly _tag = 'NumberCodec' as const
