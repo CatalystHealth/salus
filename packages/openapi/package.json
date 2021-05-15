@@ -9,7 +9,12 @@
     "openapi3-ts": "^2.0.1"
   },
   "scripts": {
+    "build": "tsc --project tsconfig.build.json",
     "test": "jest --config ../../jest.config.js",
     "execute": "node -r ts-node/register -r tsconfig-paths/register"
-  }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9153d423f6d2416bbfb957f312379c2d9ad73547"
 }
