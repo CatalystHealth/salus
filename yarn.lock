@@ -1422,14 +1422,6 @@
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
   integrity sha512-RbzJvlNzmRq5c3O09UipeuXno4tA1FE6ikOjxZK0tuxVv3412l64l5t1W5pj4+rJq9vpkm/kwiR07aZXnsKPxw==
 
-"@tsio/codec@0.0.2-alpha.5":
-  version "0.0.2-alpha.4"
-
-"@tsio/codec@workspace:*":
-  version "0.0.2-alpha.4"
-  resolved "https://registry.yarnpkg.com/@tsio/codec/-/codec-0.0.2-alpha.4.tgz#50b34c67963ff7519ffb08e6b893ffe5cbcb389b"
-  integrity sha512-W0EQzy9si5T9hNedfNLhGvt3DCFt0RjhVqHJyj9gS7phvVeR86VyxwIJqMa+BSKET3bl2vpNAJdTQsutbvmFag==
-
 "@types/babel__core@^7.0.0", "@types/babel__core@^7.1.7":
   version "7.1.14"
   resolved "https://registry.yarnpkg.com/@types/babel__core/-/babel__core-7.1.14.tgz#faaeefc4185ec71c389f4501ee5ec84b170cc402"
