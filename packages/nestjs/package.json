@@ -8,6 +8,15 @@
     "type": "git",
     "url": "https://github.com/CatalystHealth/salus.git"
   },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.map",
+    "package.json",
+    "package-lock.json",
+    "LICENSE.md",
+    "README.md"
+  ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "test": "jest --config ../../jest.config.js"

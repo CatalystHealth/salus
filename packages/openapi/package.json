@@ -8,6 +8,15 @@
     "type": "git",
     "url": "https://github.com/CatalystHealth/salus.git"
   },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.map",
+    "package.json",
+    "package-lock.json",
+    "LICENSE.md",
+    "README.md"
+  ],
   "dependencies": {
     "@salus-js/codec": "^0.1.0-alpha.0"
   },
