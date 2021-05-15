@@ -81,7 +81,7 @@ export function failure(context: Context, value: unknown, message: string): Inva
     success: false,
     errors: [
       {
-        path: context.entries.map(({ key }) => key).splice(1),
+        path: context.entries.map(({ key }) => key).filter((key) => !!key),
         codec: context.current.codec,
         message,
         value

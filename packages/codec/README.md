@@ -121,3 +121,68 @@ type CreateUserParameters = TypeOf<typeof createUserParameters> // { firstName?:
 createUserParameters.decode({}) // passes with {}
 createUserParameters.decode({ firstName: 'Salus' }) // passes with { firstName: 'Salus' }
 ```
+
+# Custom Codecs
+
+While Salus comes with a number of pre-built codecs out of the box, sometimes you'll want to write your own. Let's look at a custom codec that converts a Date to its Unix timestamp
+
+```typescript
+import { Codec, Context, failure, success, Validation } from '@salus-js/codec'
+
+export class TimestampCodec extends Codec<Date, number> {
+  readonly _tag = 'TimestampCodec' as const
+
+  protected is(value: unknown, context: Context = Context.create(this)): value is Date {
+    return value instanceof Date
+  }
+
+  protected encode(value: Date, context: Context = Context.create(this)): string {
+    return Math.round(value.getTime() / 1000)
+  }
+
+  protected decode(value: unknown, context: Context = Context.create(this)): Validation<Date> {
+    if (typeof value !== 'number') {
+      return failure(context, value, 'must be a valid timestamp')
+    }
+
+    return success(new Date(value * 1000))
+  }
+}
+
+```
+
+# Decoding
+
+Typically, decoding is the main usage of `@salus-js/codec`. In order to decode, you simply call `.decode()` on any codec instance, and pass it your unknown/untrusted data. Salus will return back one of the following:
+
+```typescript
+interface Success<T> {
+  success: true
+  value: T
+}
+
+interface Failure {
+  success: false
+  errors: ValidationError[]
+}
+```
+
+Because Salus uses a tagged union, the compiler can be smart about making sure you've checked the result of your decode operation.
+
+```typescript
+cosnt result = t.string.decode(123)
+if (!result.success) {
+  return
+}
+
+// TS knows that decoding was successful, and now you can use `result.value`
+```
+
+## Errors
+
+Salus attempts to log errors that are designed to be shown to users in the event of a failure. However, it also includes all the information you need to customize the error if you'd like. Each `ValidationError` has the following attributes:
+
+- `path` - the path to the attribute that caused the rror
+- `codec` - the codec that raised the error
+- `value` - the value that failed to validate
+- `message` - the message that the codec generated
