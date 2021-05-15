@@ -1,25 +1,9 @@
 {
+  "extends": "./tsconfig.build.json",
   "compilerOptions": {
-    "strict": true,
-    "esModuleInterop": true,
-    "moduleResolution": "node",
-    "sourceMap": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true,
-    "strictNullChecks": true,
-    "noImplicitAny": true,
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "module": "commonjs",
-    "target": "es2017",
-    "lib": ["es5", "dom", "es2015", "es2019", "esnext.array", "esnext"],
-    "baseUrl": ".",
-    "isolatedModules": true,
+    "baseUrl": "./packages",
     "paths": {
-      "@tsio/*": ["./packages/*/src"]
+      "@tsio/*": ["./*/src"],
     }
-  },
-  "exclude": [
-    "**/node_modules"
-  ]
+  }
 }
