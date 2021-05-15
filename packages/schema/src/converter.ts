@@ -1,7 +1,7 @@
+import { Codec } from '@tsio/codec'
+
 import type { JSONSchema7 } from './definition'
 import { SchemaVisitor } from './visitor'
-
-import { Codec } from '@tsio/codec'
 
 export interface SchemaConverter {
   /**

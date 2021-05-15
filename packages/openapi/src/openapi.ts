@@ -1,4 +1,4 @@
-import { JSONSchema7 } from 'packages/schema/src/definition'
+import { JSONSchema7 } from '@tsio/schema'
 
 export interface OpenAPIObject {
   openapi: string

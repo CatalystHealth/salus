@@ -1,4 +1,4 @@
-import { BaseCodec, Codec } from '@tsio/codec/src'
+import { BaseCodec, Codec } from '@tsio/codec'
 
 import { SchemaConverter } from './converter'
 import { defaultConverters } from './converters'
@@ -51,7 +51,7 @@ export class SchemaVisitor {
     let index = 0
     const next = () => {
       if (index > this.options.converters.length - 1) {
-        throw new Error('No converter was able to convert the codec')
+        throw new Error(`No converter was able to convert the codec ${codec.constructor.name}`)
       }
 
       return this.options.converters[index++].convert(codec, this, next)

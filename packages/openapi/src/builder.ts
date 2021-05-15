@@ -1,4 +1,4 @@
-import { SchemaVisitor } from '@tsio/schema/src'
+import { SchemaVisitor } from '@tsio/schema'
 
 import {
   createRequestFactory,

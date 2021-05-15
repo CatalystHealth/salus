@@ -49,6 +49,12 @@ export type Invalid = {
 
 export type Validation<T> = Valid<T> | Invalid
 
+export class ValidationFailedError extends Error {
+  constructor(public readonly errors: ValidationError[], public readonly context?: string) {
+    super('Validation failed')
+  }
+}
+
 /**
  * Creates a successful validation response with the given value
  *

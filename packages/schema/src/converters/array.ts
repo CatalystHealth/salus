@@ -1,4 +1,4 @@
-import { ArrayCodec } from '@tsio/codec/src'
+import { ArrayCodec } from '@tsio/codec'
 
 import { createSimpleConverter } from './simple'
 

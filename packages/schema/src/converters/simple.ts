@@ -1,4 +1,4 @@
-import { BaseCodec, Codec } from '@tsio/codec/src'
+import { BaseCodec, Codec } from '@tsio/codec'
 
 import { SchemaConverter } from '../converter'
 import type { JSONSchema7 } from '../definition'

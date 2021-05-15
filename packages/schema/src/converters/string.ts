@@ -1,4 +1,4 @@
-import { StringCodec } from '@tsio/codec/src'
+import { StringCodec } from '@tsio/codec'
 
 import { createSimpleConverter } from './simple'
 

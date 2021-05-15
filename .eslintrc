@@ -43,13 +43,16 @@
       { "ignoreProperties": true, "ignoreParameters": true }
     ],
     "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/ban-types": "off",
     "@typescript-eslint/no-unnecessary-condition": ["error"],
     "@typescript-eslint/no-extra-semi": ["off"],
     "@typescript-eslint/no-non-null-assertion": ["error"],
     "import/order": [
       "error",
       {
-        "groups": [["builtin", "external"], "parent", "sibling", "index", "internal"],
+        "groups": [["builtin", "external", "internal"], "parent", "sibling", "index"],
         "newlines-between": "always",
         "alphabetize": {
           "order": "asc"

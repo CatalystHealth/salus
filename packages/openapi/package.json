@@ -6,6 +6,7 @@
     "openapi3-ts": "^2.0.1"
   },
   "scripts": {
-    "test": "jest --config ../../jest.config.js"
+    "test": "jest --config ../../jest.config.js",
+    "execute": "node -r ts-node/register -r tsconfig-paths/register"
   }
 }
