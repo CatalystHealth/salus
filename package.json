@@ -1,6 +1,6 @@
 {
   "name": "@tsio/root",
-  "version": "0.0.1",
+  "version": "0.0.2-alpha.5",
   "license": "MIT",
   "private": true,
   "workspaces": [
@@ -25,5 +25,8 @@
   "scripts": {
     "test": "jest --config jest.config.js --maxWorkers 1",
     "execute": "-r ts-node/register -r tsconfig-paths/register"
+  },
+  "dependencies": {
+    "lerna": "^4.0.0"
   }
 }
