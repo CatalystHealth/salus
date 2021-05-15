@@ -1,13 +1,13 @@
 {
   "name": "@tsio/nestjs",
-  "version": "0.0.2-alpha.5",
+  "version": "0.0.3-alpha.0",
   "license": "MIT",
   "scripts": {
     "test": "jest --config ../../jest.config.js"
   },
   "dependencies": {
-    "@tsio/codec": "^0.0.2-alpha.5",
-    "@tsio/schema": "0.0.2-alpha.5"
+    "@tsio/codec": "^0.0.3-alpha.0",
+    "@tsio/schema": "^0.0.3-alpha.0"
   },
   "devDependencies": {
     "@nestjs/common": "^7.6.15",
