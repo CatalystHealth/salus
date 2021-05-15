@@ -1,4 +1,4 @@
-import { Operation } from '@salus-js/openapi'
+import { Operation } from './operation'
 
 export type OperationResult<T extends Operation> = T extends Operation<any, any, any, infer TResult>
   ? TResult
