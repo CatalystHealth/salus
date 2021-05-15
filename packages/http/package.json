@@ -1,0 +1,39 @@
+{
+  "name": "@salus-js/http",
+  "version": "0.2.0-alpha.0",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CatalystHealth/salus.git"
+  },
+  "keywords": [
+    "schema",
+    "codec",
+    "typesafe",
+    "encoding",
+    "decoding",
+    "io",
+    "serialization",
+    "deserialization",
+    "json"
+  ],
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.map",
+    "package.json",
+    "package-lock.json",
+    "LICENSE.md",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.build.json",
+    "test": "jest"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "gitHead": "9153d423f6d2416bbfb957f312379c2d9ad73547"
+}

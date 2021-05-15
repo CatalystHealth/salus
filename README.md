@@ -24,14 +24,6 @@ Salus is composed from multiple individual packages.
 
 Library for defining codecs that are able to convert between runtime and wire-types.
 
-## [@salus-js/schema](/packages/schema)
+## [@salus-js/http](/packages/http)
 
-Library for converting Salus schemas to their JsonSchema equivalents
-
-## [@salus-js/openapi](/packages/openapi)
-
-Library for declaring OpenAPI compatible operations and generating documentation
-
-## [@salus-js/nestjs](/packages/nestjs)
-
-Library for using type-safe Salus operations in NestJS
+Library for defining HTTP operations and their request/response types
