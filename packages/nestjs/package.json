@@ -2,6 +2,8 @@
   "name": "@tsio/nestjs",
   "version": "0.0.6-alpha.0",
   "license": "MIT",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "test": "jest --config ../../jest.config.js"

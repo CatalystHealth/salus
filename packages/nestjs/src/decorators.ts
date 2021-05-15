@@ -1,4 +1,12 @@
-import { Post, createParamDecorator, ExecutionContext } from '@nestjs/common'
+import {
+  Post,
+  createParamDecorator,
+  ExecutionContext,
+  Get,
+  Put,
+  Delete,
+  Patch
+} from '@nestjs/common'
 import { Codec, ValidationFailedError } from '@tsio/codec'
 import { Operation as ApiOperation } from '@tsio/openapi'
 import { Request } from 'express'
@@ -20,8 +28,28 @@ function decodeIfNecessary<A>(codec: Codec<A, any> | undefined, value: unknown):
 
 /* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-unsafe-call */
 export function Operation(operation: ApiOperation): MethodDecorator {
-  const decorator = Post(operation.opts.path)
+  let decoratorFactory: (path: string) => MethodDecorator
+  switch (operation.opts.method) {
+    case 'GET':
+      decoratorFactory = Get
+      break
+    case 'POST':
+      decoratorFactory = Post
+      break
+    case 'PUT':
+      decoratorFactory = Put
+      break
+    case 'DELETE':
+      decoratorFactory = Delete
+      break
+    case 'PATCH':
+      decoratorFactory = Patch
+      break
+    default:
+      throw new Error(`Unknown HTTP method: ${operation.opts.method}`)
+  }
 
+  const decorator = decoratorFactory(operation.opts.path)
   return <T>(
     target: Object,
     propertyKey: string | symbol,
