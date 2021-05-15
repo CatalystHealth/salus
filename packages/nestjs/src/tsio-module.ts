@@ -1,12 +1,12 @@
 import { Abstract, DynamicModule, Module, Type } from '@nestjs/common'
 import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core'
-import { OpenAPIBuilder } from '@tsio/openapi'
+import { OpenAPIBuilder } from '@salus-js/openapi'
 
 import { MODULE_OPTIONS_TOKEN } from './constants'
 import { OperationRegistry } from './operation-registry'
 import { SerializationInterceptor } from './serialization-interceptor'
 
-export interface TsioModuleOptions {
+export interface SalusModuleOptions {
   /**
    * Append a base URL to the generated OpenAPI documentation
    */
@@ -17,7 +17,7 @@ export interface TsioModuleOptions {
   readonly openApiOptions?: OpenAPIBuilder['options']
 }
 
-export interface TsioModuleOptionsFactory {
+export interface SalusModuleOptionsFactory {
   /**
    * Items to inject into the factory
    */
@@ -26,7 +26,7 @@ export interface TsioModuleOptionsFactory {
   /**
    * Factory function for
    */
-  readonly useFactory: (...dependencies: any[]) => Promise<TsioModuleOptions>
+  readonly useFactory: (...dependencies: any[]) => Promise<SalusModuleOptions>
 }
 
 @Module({
@@ -43,10 +43,10 @@ export interface TsioModuleOptionsFactory {
     }
   ]
 })
-export class TsioModule {
-  public static forRoot(options: TsioModuleOptions = {}): DynamicModule {
+export class SalusModule {
+  public static forRoot(options: SalusModuleOptions = {}): DynamicModule {
     return {
-      module: TsioModule,
+      module: SalusModule,
       providers: [
         {
           provide: MODULE_OPTIONS_TOKEN,
@@ -56,9 +56,9 @@ export class TsioModule {
     }
   }
 
-  public static forRootAsync(factory: TsioModuleOptionsFactory): DynamicModule {
+  public static forRootAsync(factory: SalusModuleOptionsFactory): DynamicModule {
     return {
-      module: TsioModule,
+      module: SalusModule,
       providers: [
         {
           provide: MODULE_OPTIONS_TOKEN,

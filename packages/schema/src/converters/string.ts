@@ -1,4 +1,4 @@
-import { StringCodec } from '@tsio/codec'
+import { StringCodec } from '@salus-js/codec'
 
 import { createSimpleConverter } from './simple'
 

@@ -1,4 +1,4 @@
-import { Codec, ObjectCodec } from '@tsio/codec'
+import { Codec, ObjectCodec } from '@salus-js/codec'
 
 import { createSimpleConverter } from './simple'
 

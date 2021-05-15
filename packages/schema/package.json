@@ -1,12 +1,12 @@
 {
-  "name": "@tsio/schema",
+  "name": "@salus-js/schema",
   "version": "0.0.6-alpha.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/CatalystHealth/tsio.git"
+    "url": "https://github.com/CatalystHealth/salus.git"
   },
   "keywords": [
     "schema",
@@ -24,7 +24,7 @@
     "test": "jest"
   },
   "dependencies": {
-    "@tsio/codec": "^0.0.6-alpha.0"
+    "@salus-js/codec": "^0.0.6-alpha.0"
   },
   "publishConfig": {
     "access": "public"

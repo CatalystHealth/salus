@@ -7,8 +7,8 @@ import {
   Delete,
   Patch
 } from '@nestjs/common'
-import { Codec, ValidationFailedError } from '@tsio/codec'
-import { Operation as ApiOperation } from '@tsio/openapi'
+import { Codec, ValidationFailedError } from '@salus-js/codec'
+import { Operation as ApiOperation } from '@salus-js/openapi'
 import { Request } from 'express'
 
 import { OPERATION_METADATA_KEY } from './constants'

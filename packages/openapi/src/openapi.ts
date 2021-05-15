@@ -1,4 +1,4 @@
-import { JSONSchema7 } from '@tsio/schema'
+import { JSONSchema7 } from '@salus-js/schema'
 
 export interface OpenAPIObject {
   openapi: string

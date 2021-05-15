@@ -1,4 +1,4 @@
-import * as io from '@tsio/codec'
+import * as io from '@salus-js/codec'
 
 interface OperationExample<TContent> {
   name: string

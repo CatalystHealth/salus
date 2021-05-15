@@ -1,13 +1,13 @@
 <div align="center">
   <h1 align="center">
-    <img src="./www/static/img/logo-text.png" alt="Tsio" height="100" />
+    <img src="./www/static/img/logo-text.png" alt="Salus" height="100" />
   </h1>
-  <p>Toolkit for building typesafe APIs (pronounced see-oh)</p>
+  <p>Toolkit for building type-safe applications and services</p>
 </div>
 
 # Intro
 
-Library for building typesafe IO boundaries such as APIs, job queues, and more in TypeScript.
+Salus is a toolkit for creating typesafe IO boundaries around APIs, job queues, and more in TypeScript.
 
 Features:
 
@@ -18,12 +18,20 @@ Features:
 
 # Packages
 
-Tsio is composed from multiple individual packages.
+Salus is composed from multiple individual packages.
 
-## [@tsio/schema](/packages/schema)
+## [@salus-js/codec](/packages/codec)
 
-Powerful library for defining IO schemas that are able to convert to and from JSON.
+Library for defining codecs that are able to convert between runtime and wire-types.
 
-## [@tsio/openapi](/packages/openapi)
+## [@salus-js/schema](/packages/schema)
 
-Simple toolkit for converting Tsio schemas to their OpenAPI equivalents.
+Library for converting Salus schemas to their JsonSchema equivalents
+
+## [@salus-js/openapi](/packages/openapi)
+
+Library for declaring OpenAPI compatible operations and generating documentation
+
+## [@salus-js/nestjs](/packages/nestjs)
+
+Library for using type-safe Salus operations in NestJS

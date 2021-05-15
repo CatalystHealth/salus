@@ -1,16 +1,20 @@
 {
-  "name": "@tsio/nestjs",
+  "name": "@salus-js/nestjs",
   "version": "0.0.8-alpha.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CatalystHealth/salus.git"
+  },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
     "test": "jest --config ../../jest.config.js"
   },
   "dependencies": {
-    "@tsio/codec": "^0.0.6-alpha.0",
-    "@tsio/schema": "^0.0.6-alpha.0"
+    "@salus-js/codec": "^0.0.6-alpha.0",
+    "@salus-js/schema": "^0.0.6-alpha.0"
   },
   "devDependencies": {
     "@nestjs/common": "^7.6.15",

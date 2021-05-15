@@ -1,6 +1,6 @@
 import { MetadataScanner, ModuleRef, NestContainer } from '@nestjs/core'
 import { Module } from '@nestjs/core/injector/module'
-import { OpenAPIBuilder, Operation, OpenAPIObject } from '@tsio/openapi'
+import { OpenAPIBuilder, Operation, OpenAPIObject } from '@salus-js/openapi'
 
 import { OPERATION_METADATA_KEY } from './constants'
 
@@ -27,10 +27,7 @@ export class OperationRegistry {
       const refinedInstance = controller.instance as Record<string, unknown>
       const prototype = Object.getPrototypeOf(refinedInstance)
       const scanned = scanner.scanFromPrototype(refinedInstance, prototype, (name) => {
-        return Reflect.getMetadata(
-          OPERATION_METADATA_KEY,
-          refinedInstance[name] as Object
-        ) as Operation | null
+        return Reflect.getMetadata(OPERATION_METADATA_KEY, refinedInstance[name] as Object)
       })
 
       return scanned.filter((operation) => !!operation) as Operation[]

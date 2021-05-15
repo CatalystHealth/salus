@@ -1,19 +1,19 @@
 # Intro
 
-Library for converting Tsio schemas (and operations) into OpenAPI-compatible definitions.
+Library for converting Salus codecs (and operations) into OpenAPI-compatible definitions.
 
 Features:
 
-- Support for all out-of-the-box Tsio capabilities
+- Support for all out-of-the-box Salus capabilities
 - Easy extension for
 - Minimal dependencies
 
 # Usage
 
-Starting with a simple schema defined using `@tsio/schema`, such as:
+Starting with a simple codec defined using `@salus-js/codec`, such as:
 
 ```typescript
-import * as s from '@tsio/schema'
+import * as s from '@salus-js/codec'
 
 const Person = s.type({
   firstName: s.string.maxLength(255).document({
@@ -30,10 +30,10 @@ const Person = s.type({
 })
 ```
 
-We can use `@tsio/openapi` to convert to an OpenAPI compatible schema:
+We can use `@salus-js/openapi` to convert to an OpenAPI compatible codec:
 
 ```typescript
-import { toJsonSchema } from '@tsio/openapi'
+import { toJsonSchema } from '@salus-js/openapi'
 
 const schema = toJsonSchema(Person)
 ```
@@ -66,8 +66,8 @@ requiredProperties:
 The example above focuses on generating a single, simple schema. More often than not, when using OpenAPI, you're looking to document a complete API including operations and schemas. This is what the `OpenAPIGenerator` class is for. Let's take a quick look:
 
 ```typescript
-import * as s from '@tsio/schema'
-import * as o from '@tsio/operations'
+import * as s from '@salus-js/schema'
+import * as o from '@salus-js/operations'
 
 const personResource = s
   .type({
@@ -94,7 +94,7 @@ const generator = OpenAPIGenerator.create()
   .generate({
     info: {
       version: '1.0.0',
-      title: 'Tsio API'
+      title: 'Salus API'
     },
     servers: [{
       url: 'https://example.org/api'
@@ -106,7 +106,7 @@ const generator = OpenAPIGenerator.create()
 openapi: '3.1.0'
 info:
   version: 1.0.0
-  title: Tsio API
+  title: Salus API
 servers:
   - url: https://example.org/api
 paths:

@@ -1,5 +1,5 @@
 import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common'
-import { Operation } from '@tsio/openapi'
+import { Operation } from '@salus-js/openapi'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
@@ -11,7 +11,7 @@ export class SerializationInterceptor implements NestInterceptor {
     next: CallHandler<any>
   ): Observable<any> | Promise<Observable<any>> {
     const handler = context.getHandler()
-    const operation = Reflect.getMetadata(OPERATION_METADATA_KEY, handler) as Operation | null
+    const operation = Reflect.getMetadata(OPERATION_METADATA_KEY, handler)
     if (!operation) {
       return next.handle()
     }

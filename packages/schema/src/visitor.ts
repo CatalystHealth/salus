@@ -1,4 +1,4 @@
-import { BaseCodec, Codec } from '@tsio/codec'
+import { BaseCodec, Codec } from '@salus-js/codec'
 
 import { SchemaConverter } from './converter'
 import { defaultConverters } from './converters'

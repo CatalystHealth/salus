@@ -1,4 +1,4 @@
-import { SchemaVisitor } from '@tsio/schema'
+import { SchemaVisitor } from '@salus-js/schema'
 
 import {
   createRequestFactory,

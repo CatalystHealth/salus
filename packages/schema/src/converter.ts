@@ -1,4 +1,4 @@
-import { Codec } from '@tsio/codec'
+import { Codec } from '@salus-js/codec'
 
 import type { JSONSchema7 } from './definition'
 import { SchemaVisitor } from './visitor'
