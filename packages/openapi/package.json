@@ -1,11 +1,11 @@
 {
   "name": "@tsio/openapi",
-  "version": "0.0.5-alpha.0",
+  "version": "0.0.6-alpha.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@tsio/codec": "^0.0.5-alpha.0"
+    "@tsio/codec": "^0.0.6-alpha.0"
   },
   "devDependencies": {
     "openapi3-ts": "^2.0.1"
