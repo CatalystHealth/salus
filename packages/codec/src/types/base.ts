@@ -57,6 +57,8 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
         return failure(context, value, refinement.message || 'invalid')
       }
     }
+
+    return result
   }
 
   /**
