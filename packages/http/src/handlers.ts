@@ -1,20 +1,20 @@
-import { Any, Unknown } from '@salus-js/codec'
+import { Any, Undefined, Unknown } from '@salus-js/codec'
 
 import { Operation, OperationOptions } from './operation'
 
 export type OperationWithoutBodyFactory = <
-  TParams extends Any = Unknown,
-  TQuery extends Any = Unknown,
+  TParams extends Any = Undefined,
+  TQuery extends Any = Undefined,
   TResponse extends Any = Unknown
 >(
   path: string,
-  options: Omit<OperationOptions<TParams, TQuery, never, TResponse>, 'path' | 'method' | 'body'>
-) => Operation<TParams, TQuery, never, TResponse>
+  options: Omit<OperationOptions<TParams, TQuery, Undefined, TResponse>, 'path' | 'method' | 'body'>
+) => Operation<TParams, TQuery, Undefined, TResponse>
 
 export type OperationWithBodyFactory = <
-  TParams extends Any = Unknown,
-  TQuery extends Any = Unknown,
-  TBody extends Any = Unknown,
+  TParams extends Any = Undefined,
+  TQuery extends Any = Undefined,
+  TBody extends Any = Undefined,
   TResponse extends Any = Unknown
 >(
   path: string,
@@ -27,9 +27,9 @@ export function createOperationHandler(
   method: string
 ): OperationWithBodyFactory | OperationWithoutBodyFactory {
   return <
-    TParams extends Any = Unknown,
-    TQuery extends Any = Unknown,
-    TBody extends Any = Unknown,
+    TParams extends Any = Undefined,
+    TQuery extends Any = Undefined,
+    TBody extends Any = Undefined,
     TResponse extends Any = Unknown
   >(
     path: string,

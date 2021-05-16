@@ -22,8 +22,12 @@ Salus is composed from multiple individual packages.
 
 ## [@salus-js/codec](/packages/codec)
 
-Library for defining codecs that are able to convert between runtime and wire-types.
+Library for defining codecs that are able to convert between runtime and wire-types
 
 ## [@salus-js/http](/packages/http)
 
-Library for defining HTTP operations and their request/response types
+Library for defining the structure of an HTTP request and response
+
+## [@salus-js/http-client](/packages/http-client)
+
+Library for making type-safe HTTP calls built on the Axios client

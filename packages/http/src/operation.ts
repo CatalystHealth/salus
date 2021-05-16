@@ -1,10 +1,5 @@
 import { Any, Codec, OutputOf, TypeOf, Unknown, ValidationFailedError } from '@salus-js/codec'
-
-interface RequestAttributes<TParams, TQuery, TBody> {
-  readonly params: TParams | undefined
-  readonly query: TQuery | undefined
-  readonly body: TBody | undefined
-}
+import { compile, PathFunction } from 'path-to-regexp'
 
 export interface OperationOptions<
   TParams extends Any = Unknown,
@@ -57,30 +52,20 @@ export class Operation<
   readonly _B!: TypeOf<TQuery>
   readonly _R!: TypeOf<TResponse>
 
-  constructor(public readonly options: OperationOptions<TParams, TQuery, TBody, TResponse>) {}
+  private readonly compiledPath: PathFunction<OutputOf<TParams>>
+
+  constructor(public readonly options: OperationOptions<TParams, TQuery, TBody, TResponse>) {
+    this.compiledPath = compile(options.path)
+  }
 
   /**
-   * Encodes the request arguments to prepare them for serialization
+   * Get a formatted path with the given parameters substituted in
    *
-   * @param input the runtime-typed request arguments
-   * @returns the encoded request arguments
+   * @param params the parameters to pass to the path
+   * @returns the formatted path
    */
-  public encodeRequest(
-    input: RequestAttributes<TypeOf<TParams>, TypeOf<TQuery>, TypeOf<TBody>>
-  ): RequestAttributes<OutputOf<TParams>, OutputOf<TQuery>, OutputOf<TBody>> {
-    function encodeIfRequired<T, O>(codec?: Codec<T, O>, value?: T): O | undefined {
-      if (!codec || !value) {
-        return undefined
-      }
-
-      return codec.encode(value)
-    }
-
-    return {
-      params: encodeIfRequired(this.options.params, input.params),
-      query: encodeIfRequired(this.options.query, input.query),
-      body: encodeIfRequired(this.options.body, input.body)
-    }
+  public formatPath(params?: TypeOf<TParams>): string {
+    return this.compiledPath(this.encodeParams(params))
   }
 
   /**
@@ -89,31 +74,58 @@ export class Operation<
    * @param input the runtime-typed request arguments
    * @returns the encoded request arguments
    */
-  public decodeRequest(
-    input: RequestAttributes<unknown, unknown, unknown>
-  ): RequestAttributes<TypeOf<TParams>, TypeOf<TQuery>, TypeOf<TBody>> {
-    function decodeIfRequired<T, O>(
-      codec?: Codec<T, O>,
-      value?: unknown,
-      context?: string
-    ): T | undefined {
-      if (!codec || !value) {
-        return undefined
-      }
+  public encodeQuery(input: TypeOf<TQuery>): OutputOf<TQuery> {
+    return this.options.query?.encode(input)
+  }
 
-      const result = codec.decode(value)
-      if (!result.success) {
-        throw new ValidationFailedError(result.errors, context)
-      }
+  /**
+   * Encodes the request arguments to prepare them for serialization
+   *
+   * @param input the runtime-typed request arguments
+   * @returns the encoded request arguments
+   */
+  public decodeQuery(input: unknown): TypeOf<TQuery> {
+    return this.decodeOrFail(this.options.query, input, 'query')
+  }
 
-      return result.value
-    }
+  /**
+   * Encodes the request arguments to prepare them for serialization
+   *
+   * @param input the runtime-typed request arguments
+   * @returns the encoded request arguments
+   */
+  public encodeParams(input: TypeOf<TParams>): OutputOf<TParams> {
+    return this.options.params?.encode(input)
+  }
 
-    return {
-      params: decodeIfRequired(this.options.params, input.params, 'params'),
-      query: decodeIfRequired(this.options.query, input.query, 'query'),
-      body: decodeIfRequired(this.options.body, input.body, 'body')
-    }
+  /**
+   * Encodes the request arguments to prepare them for serialization
+   *
+   * @param input the runtime-typed request arguments
+   * @returns the encoded request arguments
+   */
+  public decodeParams(input: unknown): TypeOf<TQuery> {
+    return this.decodeOrFail(this.options.params, input, 'params')
+  }
+
+  /**
+   * Encodes the request arguments to prepare them for serialization
+   *
+   * @param input the runtime-typed request arguments
+   * @returns the encoded request arguments
+   */
+  public encodeBody(input: TypeOf<TBody>): OutputOf<TBody> {
+    return this.options.body?.encode(input)
+  }
+
+  /**
+   * Encodes the request arguments to prepare them for serialization
+   *
+   * @param input the runtime-typed request arguments
+   * @returns the encoded request arguments
+   */
+  public decodeBody(input: unknown): TypeOf<TBody> {
+    return this.decodeOrFail(this.options.body, input, 'body')
   }
 
   /**
@@ -136,6 +148,19 @@ export class Operation<
     const result = this.options.response.decode(response)
     if (!result.success) {
       throw new ValidationFailedError(result.errors, 'response')
+    }
+
+    return result.value
+  }
+
+  private decodeOrFail<O>(codec: Codec<any, O> | undefined, value: unknown, context: string): O {
+    if (!codec || value === undefined) {
+      return (undefined as unknown) as O
+    }
+
+    const result = codec.decode(value)
+    if (!result.success) {
+      throw new ValidationFailedError(result.errors, context)
     }
 
     return result.value

@@ -1,5 +1,5 @@
 {
-  "name": "@salus-js/http",
+  "name": "@salus-js/http-client",
   "version": "0.2.0-alpha.0",
   "license": "MIT",
   "main": "./dist/index.js",
@@ -29,7 +29,7 @@
     "README.md"
   ],
   "dependencies": {
-    "path-to-regexp": "^6.2.0",
+    "@salus-js/http": "^0.2.0-alpha.0",
     "@salus-js/codec": "^0.2.0-alpha.0"
   },
   "scripts": {
@@ -39,5 +39,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "9153d423f6d2416bbfb957f312379c2d9ad73547"
+  "gitHead": "9153d423f6d2416bbfb957f312379c2d9ad73547",
+  "devDependencies": {
+    "axios": "^0.21.1"
+  },
+  "peerDependencies": {
+    "axios": "^0.21.1"
+  }
 }
