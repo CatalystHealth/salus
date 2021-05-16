@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/codec",
-  "version": "0.4.1-alpha.0",
+  "version": "0.4.2-alpha.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
