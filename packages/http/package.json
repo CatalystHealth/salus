@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/http",
-  "version": "0.2.0-alpha.0",
+  "version": "0.3.0-alpha.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -29,8 +29,8 @@
     "README.md"
   ],
   "dependencies": {
-    "path-to-regexp": "^6.2.0",
-    "@salus-js/codec": "^0.2.0-alpha.0"
+    "@salus-js/codec": "^0.3.0-alpha.0",
+    "path-to-regexp": "^6.2.0"
   },
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
