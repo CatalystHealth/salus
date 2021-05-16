@@ -1,4 +1,4 @@
-import { SchemaVisitor } from '@salus-js/schema'
+import { Operation } from '@salus-js/http'
 
 import {
   createRequestFactory,
@@ -15,18 +15,23 @@ import {
   SecurityRequirementObject,
   SchemaObject,
   OperationObject,
-  ReferenceObject
+  isSchemaObject
 } from './openapi'
-import { Operation } from './operation'
+import { SchemaVisitor } from './visitor'
 
 type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>
 type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 interface OpenAPIBuilderOptions {
-  info: InfoObject
-  requestBodyFactory: RequestFactory
-  responseBodyFactory: ResponseFactory
+  readonly info: InfoObject
+  readonly requestBodyFactory: RequestFactory
+  readonly responseBodyFactory: ResponseFactory
 }
+
+export type OpenAPIInputOptions = WithOptional<
+  OpenAPIBuilderOptions,
+  'requestBodyFactory' | 'responseBodyFactory'
+>
 
 export class OpenAPIBuilder {
   private readonly options: OpenAPIBuilderOptions
@@ -109,49 +114,48 @@ export class OpenAPIBuilder {
     return this
   }
 
-  public operation(...operations: Operation[]): OpenAPIBuilder {
+  public operation(operations: Operation<any, any, any, any>[]): OpenAPIBuilder {
     for (const operation of operations) {
       const documentedOperation = {} as OperationObject
+      const pathParameters = {} as any
 
-      if (operation.opts.description) {
-        documentedOperation.description = operation.opts.description
+      if (operation.options.description) {
+        documentedOperation.description = operation.options.description
       }
 
-      if (operation.opts.tags) {
-        documentedOperation.tags = operation.opts.tags
+      if (operation.options.tags) {
+        documentedOperation.tags = operation.options.tags
       }
 
-      if (operation.opts.body) {
-        documentedOperation.requestBody = this.options.requestBodyFactory(
-          operation,
-          this.visitor.convert(operation.opts.body)
-        )
-      }
-
-      if (operation.opts.params) {
-        const converted = this.visitor.convert(operation.opts.params)
-        if (converted.type !== 'object') {
+      if (operation.options.params) {
+        const converted = this.visitor.convert(operation.options.params)
+        if (!isSchemaObject(converted) || converted.type !== 'object') {
           throw new Error('Path parameters must always generate an object schema')
         }
 
+        const parameterEntries = Object.entries(converted.properties || {})
         documentedOperation.parameters ||= []
         documentedOperation.parameters.push(
-          ...Object.entries(converted.properties || {}).map(([key, schema]) => ({
+          ...parameterEntries.map(([key, schema]) => ({
             in: 'path' as const,
             style: 'simple' as const,
             explode: true,
             name: key,
-            schema: schema as SchemaObject | ReferenceObject,
+            schema: schema,
             required: true,
-            description: (schema as SchemaObject).description
+            description: isSchemaObject(schema) ? schema.description : undefined
           }))
         )
+
+        for (const [name] of parameterEntries) {
+          pathParameters[name] = `{${name}}`
+        }
       }
 
-      if (operation.opts.query) {
-        const converted = this.visitor.convert(operation.opts.query)
-        if (converted.type !== 'object') {
-          throw new Error('Query parameters must always generate an object schema')
+      if (operation.options.query) {
+        const converted = this.visitor.convert(operation.options.query)
+        if (!isSchemaObject(converted) || converted.type !== 'object') {
+          throw new Error('Path parameters must always generate an object schema')
         }
 
         documentedOperation.parameters ||= []
@@ -161,21 +165,28 @@ export class OpenAPIBuilder {
             style: 'form' as const,
             explode: true,
             name: key,
-            schema: schema as SchemaObject | ReferenceObject,
-            description: (schema as SchemaObject).description
+            schema: schema,
+            required: (converted.required?.indexOf(key) ?? -1) > -1,
+            description: isSchemaObject(schema) ? schema.description : undefined
           }))
+        )
+      }
+
+      if (operation.options.body) {
+        documentedOperation.requestBody = this.options.requestBodyFactory(
+          operation,
+          this.visitor.convert(operation.options.body)
         )
       }
 
       documentedOperation.responses = this.options.responseBodyFactory(
         operation,
-        this.visitor.convert(operation.opts.response)
+        this.visitor.convert(operation.options.response)
       )
 
-      this.document.paths[operation.opts.path] ||= {}
-      this.document.paths[operation.opts.path][
-        operation.opts.method.toLowerCase() as 'post'
-      ] = documentedOperation
+      const path = operation.formatPath(pathParameters)
+      this.document.paths[path] ||= {}
+      this.document.paths[path][operation.options.method] = documentedOperation
     }
 
     return this
@@ -191,9 +202,7 @@ export class OpenAPIBuilder {
    * @param options info object to attach to the document
    * @returns a new OpenAPI generator
    */
-  public static create(
-    options: WithOptional<OpenAPIBuilderOptions, 'requestBodyFactory' | 'responseBodyFactory'>
-  ): OpenAPIBuilder {
+  public static create(options: OpenAPIInputOptions): OpenAPIBuilder {
     return new OpenAPIBuilder({
       requestBodyFactory: createRequestFactory('application/json'),
       responseBodyFactory: createResponseFactory('application/json'),

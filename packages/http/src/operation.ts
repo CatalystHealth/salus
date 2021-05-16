@@ -1,6 +1,8 @@
 import { Any, Codec, OutputOf, TypeOf, Unknown, ValidationFailedError } from '@salus-js/codec'
 import { compile, PathFunction } from 'path-to-regexp'
 
+import { Methods } from './types'
+
 export interface OperationOptions<
   TParams extends Any = Unknown,
   TQuery extends Any = Unknown,
@@ -14,7 +16,7 @@ export interface OperationOptions<
   /**
    * HTTP method on the request
    */
-  readonly method: string
+  readonly method: Methods
   /**
    * Summary of what this operation does
    */
@@ -23,6 +25,10 @@ export interface OperationOptions<
    * Long form description of this operation's behavior
    */
   readonly description?: string
+  /**
+   * Tags associated with the operation
+   */
+  readonly tags?: string[]
   /**
    * Codec for path parameters
    */

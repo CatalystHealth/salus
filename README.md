@@ -31,3 +31,11 @@ Library for defining the structure of an HTTP request and response
 ## [@salus-js/http-client](/packages/http-client)
 
 Library for making type-safe HTTP calls built on the Axios client
+
+## [@salus-js/openapi](/packages/openapi)
+
+Library for converting Salus codecs and operations into OpenAPI-compatible specs
+
+## [@salus-js/nestjs](/packages/nestjs)
+
+Library for mounting Salus operations as NestJS controllers

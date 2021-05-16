@@ -1,6 +1,16 @@
-import { Abstract, DynamicModule, Module, Type } from '@nestjs/common'
+import {
+  Abstract,
+  DynamicModule,
+  Inject,
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+  Type
+} from '@nestjs/common'
 import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core'
-import { OpenAPIBuilder } from '@salus-js/openapi'
+import { OpenAPIInputOptions } from '@salus-js/openapi'
+import { Request, Response } from 'express'
 
 import { MODULE_OPTIONS_TOKEN } from './constants'
 import { OperationRegistry } from './operation-registry'
@@ -11,10 +21,14 @@ export interface SalusModuleOptions {
    * Append a base URL to the generated OpenAPI documentation
    */
   readonly baseUrl?: string
+
   /**
-   * Append a base URL to the generated OpenAPI documentation
+   * Path to mount on the server for the OpenAPI definition
    */
-  readonly openApiOptions?: OpenAPIBuilder['options']
+  readonly openApi?: {
+    readonly path: string
+    readonly options: OpenAPIInputOptions
+  }
 }
 
 export interface SalusModuleOptionsFactory {
@@ -43,7 +57,32 @@ export interface SalusModuleOptionsFactory {
     }
   ]
 })
-export class SalusModule {
+export class SalusModule implements NestModule {
+  constructor(
+    @Inject(MODULE_OPTIONS_TOKEN) private readonly options: SalusModuleOptions,
+    @Inject(OperationRegistry) private readonly registry: OperationRegistry
+  ) {}
+
+  public configure(consumer: MiddlewareConsumer): void {
+    const openApi = this.options.openApi
+    if (!openApi) {
+      return
+    }
+
+    const openApiMiddleware = (_req: Request, res: Response) => {
+      const document = this.registry.createOpenApiDocument({
+        ...openApi.options
+      })
+
+      res.send(document)
+    }
+
+    consumer.apply(openApiMiddleware).forRoutes({
+      method: RequestMethod.GET,
+      path: openApi.path
+    })
+  }
+
   public static forRoot(options: SalusModuleOptions = {}): DynamicModule {
     return {
       module: SalusModule,

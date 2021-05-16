@@ -11,13 +11,14 @@ type CustomizableOptions =
   | 'headers'
   | 'baseURL'
 
-type RequestOptions<TParams, TQuery, TBody> = Pick<AxiosRequestConfig, CustomizableOptions> & {
+interface RequestOptions<TParams, TQuery, TBody>
+  extends Pick<AxiosRequestConfig, CustomizableOptions> {
   readonly params?: TParams
   readonly query?: TQuery
   readonly body?: TBody
 }
 
-export class AxiosClient {
+export class HttpClient {
   private readonly axios: AxiosInstance
   private constructor(baseURL: string, options: AxiosRequestConfig = {}) {
     this.axios = axios.create({
@@ -59,7 +60,7 @@ export class AxiosClient {
     }
   }
 
-  public static create(baseURL: string, options: AxiosRequestConfig = {}): AxiosClient {
-    return new AxiosClient(baseURL, options)
+  public static create(baseURL: string, options: AxiosRequestConfig = {}): HttpClient {
+    return new HttpClient(baseURL, options)
   }
 }

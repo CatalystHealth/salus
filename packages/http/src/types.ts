@@ -1,5 +1,7 @@
 import { Operation } from './operation'
 
+export type Methods = 'get' | 'post' | 'put' | 'delete' | 'patch'
+
 /**
  * Extracts the parameter type from an operation
  */

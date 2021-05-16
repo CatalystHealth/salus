@@ -1,5 +1,6 @@
+import { Operation } from '@salus-js/http'
+
 import { ReferenceObject, RequestBodyObject, ResponsesObject, SchemaObject } from './openapi'
-import { Operation } from './operation'
 
 export type RequestFactory = (
   operation: Operation,

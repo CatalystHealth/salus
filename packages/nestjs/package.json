@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@salus-js/codec": "^0.3.0-alpha.0",
-    "@salus-js/schema": "^0.3.0-alpha.0"
+    "@salus-js/openapi": "^0.3.0-alpha.0"
   },
   "devDependencies": {
     "@nestjs/common": "^7.6.15",

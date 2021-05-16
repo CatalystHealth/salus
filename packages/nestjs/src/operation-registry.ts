@@ -1,6 +1,7 @@
 import { MetadataScanner, ModuleRef, NestContainer } from '@nestjs/core'
 import { Module } from '@nestjs/core/injector/module'
-import { OpenAPIBuilder, Operation, OpenAPIObject } from '@salus-js/openapi'
+import { Operation } from '@salus-js/http'
+import { OpenAPIBuilder, OpenAPIInputOptions, OpenAPIObject } from '@salus-js/openapi'
 
 import { OPERATION_METADATA_KEY } from './constants'
 
@@ -8,14 +9,12 @@ export class OperationRegistry {
   constructor(private readonly operations: Operation[]) {}
 
   public createOpenApiDocument(
-    options: OpenAPIBuilder['options'],
+    options: OpenAPIInputOptions,
     filter?: (operation: Operation) => boolean
   ): OpenAPIObject {
     const filteredOperations = !filter ? this.operations : this.operations.filter(filter)
 
-    return OpenAPIBuilder.create(options)
-      .operation(...filteredOperations)
-      .build()
+    return OpenAPIBuilder.create(options).operation(filteredOperations).build()
   }
 
   public static from(module: ModuleRef): OperationRegistry {

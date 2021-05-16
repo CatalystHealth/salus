@@ -9,7 +9,8 @@ import {
   BooleanCodec,
   EnumCodec,
   Partialize,
-  DateCodec
+  DateCodec,
+  BaseCodec
 } from './types'
 
 const boolean = new BooleanCodec()
@@ -37,4 +38,19 @@ function partial<P extends Props>(codec: P): ObjectCodec<Partialize<P>> {
   return ObjectCodec.partial(codec)
 }
 
-export { array, boolean, date, enumFactory as enum, literal, number, object, partial, string }
+function named<C extends BaseCodec<any, any>>(name: string, codec: C): C {
+  return codec.named(name)
+}
+
+export {
+  array,
+  boolean,
+  date,
+  enumFactory as enum,
+  literal,
+  named,
+  number,
+  object,
+  partial,
+  string
+}

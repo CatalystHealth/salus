@@ -1,6 +1,8 @@
-import { JSONSchema7 } from '@salus-js/schema'
+export interface ISpecificationExtension {
+  [key: string]: unknown
+}
 
-export interface OpenAPIObject {
+export interface OpenAPIObject extends ISpecificationExtension {
   openapi: string
   info: InfoObject
   servers?: ServerObject[]
@@ -10,8 +12,7 @@ export interface OpenAPIObject {
   tags?: TagObject[]
   externalDocs?: ExternalDocumentationObject
 }
-
-export interface InfoObject {
+export interface InfoObject extends ISpecificationExtension {
   title: string
   description?: string
   termsOfService?: string
@@ -19,44 +20,47 @@ export interface InfoObject {
   license?: LicenseObject
   version: string
 }
-
-export interface ContactObject {
+export interface ContactObject extends ISpecificationExtension {
   name?: string
   url?: string
   email?: string
 }
-
-export interface LicenseObject {
+export interface LicenseObject extends ISpecificationExtension {
   name: string
   url?: string
 }
-
-export interface ServerObject {
+export interface ServerObject extends ISpecificationExtension {
   url: string
   description?: string
-  variables?: Record<string, ServerVariableObject>
+  variables?: { [v: string]: ServerVariableObject }
 }
-
-export interface ServerVariableObject {
+export interface ServerVariableObject extends ISpecificationExtension {
   enum?: string[] | boolean[] | number[]
   default: string | boolean | number
   description?: string
 }
-
-export interface ComponentsObject {
-  schemas?: Record<string, SchemaObject | ReferenceObject>
-  responses?: Record<string, ResponseObject | ReferenceObject>
-  parameters?: Record<string, ParameterObject | ReferenceObject>
-  examples?: Record<string, ExampleObject | ReferenceObject>
-  requestBodies?: Record<string, RequestBodyObject | ReferenceObject>
-  headers?: Record<string, HeaderObject | ReferenceObject>
-  securitySchemes?: Record<string, SecuritySchemeObject | ReferenceObject>
-  links?: Record<string, LinkObject | ReferenceObject>
-  callbacks?: Record<string, CallbackObject | ReferenceObject>
+export interface ComponentsObject extends ISpecificationExtension {
+  schemas?: { [schema: string]: SchemaObject | ReferenceObject }
+  responses?: { [response: string]: ResponseObject | ReferenceObject }
+  parameters?: { [parameter: string]: ParameterObject | ReferenceObject }
+  examples?: { [example: string]: ExampleObject | ReferenceObject }
+  requestBodies?: { [request: string]: RequestBodyObject | ReferenceObject }
+  headers?: { [header: string]: HeaderObject | ReferenceObject }
+  securitySchemes?: { [securityScheme: string]: SecuritySchemeObject | ReferenceObject }
+  links?: { [link: string]: LinkObject | ReferenceObject }
+  callbacks?: { [callback: string]: CallbackObject | ReferenceObject }
 }
 
-export type PathsObject = Record<string, PathItemObject>
-export interface PathItemObject {
+/**
+ * Rename it to Paths Object to be consistent with the spec
+ * See https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#pathsObject
+ */
+export interface PathsObject extends ISpecificationExtension {
+  // [path: string]: PathItemObject;
+  [path: string]: PathItemObject | any // Hack for allowing ISpecificationExtension
+}
+
+export interface PathItemObject extends ISpecificationExtension {
   $ref?: string
   summary?: string
   description?: string
@@ -71,8 +75,7 @@ export interface PathItemObject {
   servers?: ServerObject[]
   parameters?: (ParameterObject | ReferenceObject)[]
 }
-
-export interface OperationObject {
+export interface OperationObject extends ISpecificationExtension {
   tags?: string[]
   summary?: string
   description?: string
@@ -86,13 +89,26 @@ export interface OperationObject {
   security?: SecurityRequirementObject[]
   servers?: ServerObject[]
 }
-
-export interface ExternalDocumentationObject {
+export interface ExternalDocumentationObject extends ISpecificationExtension {
   description?: string
   url: string
 }
 
+/**
+ * The location of a parameter.
+ * Possible values are "query", "header", "path" or "cookie".
+ * Specification:
+ * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#parameter-locations
+ */
 export type ParameterLocation = 'query' | 'header' | 'path' | 'cookie'
+
+/**
+ * The style of a parameter.
+ * Describes how the parameter value will be serialized.
+ * (serialization is not implemented yet)
+ * Specification:
+ * https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.0.md#style-values
+ */
 export type ParameterStyle =
   | 'matrix'
   | 'label'
@@ -102,138 +118,231 @@ export type ParameterStyle =
   | 'pipeDelimited'
   | 'deepObject'
 
-export interface BaseParameterObject {
+export interface BaseParameterObject extends ISpecificationExtension {
   description?: string
   required?: boolean
   deprecated?: boolean
   allowEmptyValue?: boolean
-  style?: ParameterStyle
+
+  style?: ParameterStyle // "matrix" | "label" | "form" | "simple" | "spaceDelimited" | "pipeDelimited" | "deepObject";
   explode?: boolean
   allowReserved?: boolean
   schema?: SchemaObject | ReferenceObject
-  examples?: Record<string, ExampleObject | ReferenceObject>
+  examples?: { [param: string]: ExampleObject | ReferenceObject }
   example?: any
   content?: ContentObject
 }
 
 export interface ParameterObject extends BaseParameterObject {
   name: string
-  in: ParameterLocation
+  in: ParameterLocation // "query" | "header" | "path" | "cookie";
 }
-
-export interface RequestBodyObject {
+export interface RequestBodyObject extends ISpecificationExtension {
   description?: string
   content: ContentObject
   required?: boolean
 }
-
-export type ContentObject = Record<string, MediaTypeObject>
-export interface MediaTypeObject {
+export interface ContentObject {
+  [mediatype: string]: MediaTypeObject
+}
+export interface MediaTypeObject extends ISpecificationExtension {
   schema?: SchemaObject | ReferenceObject
   examples?: ExamplesObject
   example?: any
   encoding?: EncodingObject
 }
-
-export type EncodingObject = Record<string, EncodingPropertyObject>
+export interface EncodingObject extends ISpecificationExtension {
+  // [property: string]: EncodingPropertyObject;
+  [property: string]: EncodingPropertyObject | any // Hack for allowing ISpecificationExtension
+}
 export interface EncodingPropertyObject {
   contentType?: string
-  headers?: Record<string, HeaderObject | ReferenceObject>
+  headers?: { [key: string]: HeaderObject | ReferenceObject }
   style?: string
   explode?: boolean
   allowReserved?: boolean
+  [key: string]: any // (any) = Hack for allowing ISpecificationExtension
 }
-
-export interface ResponsesObject
-  extends Record<string, ResponseObject | ReferenceObject | undefined> {
+export interface ResponsesObject extends ISpecificationExtension {
   default?: ResponseObject | ReferenceObject
-}
 
-export interface ResponseObject {
+  // [statuscode: string]: ResponseObject | ReferenceObject;
+  [statuscode: string]: ResponseObject | ReferenceObject | any // (any) = Hack for allowing ISpecificationExtension
+}
+export interface ResponseObject extends ISpecificationExtension {
   description: string
   headers?: HeadersObject
   content?: ContentObject
   links?: LinksObject
 }
-
-export type CallbacksObject = Record<string, CallbackObject | ReferenceObject>
-export type CallbackObject = Record<string, PathItemObject>
-export type HeadersObject = Record<string, HeaderObject | ReferenceObject>
-
+export interface CallbacksObject extends ISpecificationExtension {
+  // [name: string]: CallbackObject | ReferenceObject;
+  [name: string]: CallbackObject | ReferenceObject | any // Hack for allowing ISpecificationExtension
+}
+export interface CallbackObject extends ISpecificationExtension {
+  // [name: string]: PathItemObject;
+  [name: string]: PathItemObject | any // Hack for allowing ISpecificationExtension
+}
+export interface HeadersObject {
+  [name: string]: HeaderObject | ReferenceObject
+}
 export interface ExampleObject {
   summary?: string
   description?: string
   value?: any
   externalValue?: string
+  [property: string]: any // Hack for allowing ISpecificationExtension
 }
-
-export type LinksObject = Record<string, LinkObject | ReferenceObject>
-export interface LinkObject {
+export interface LinksObject {
+  [name: string]: LinkObject | ReferenceObject
+}
+export interface LinkObject extends ISpecificationExtension {
   operationRef?: string
   operationId?: string
   parameters?: LinkParametersObject
   requestBody?: any | string
   description?: string
   server?: ServerObject
+  [property: string]: any // Hack for allowing ISpecificationExtension
 }
-
-export type LinkParametersObject = Record<string, any>
-export type HeaderObject = BaseParameterObject
-export interface TagObject {
+export interface LinkParametersObject {
+  [name: string]: any | string
+}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface HeaderObject extends BaseParameterObject {}
+export interface TagObject extends ISpecificationExtension {
   name: string
   description?: string
   externalDocs?: ExternalDocumentationObject
+  [extension: string]: any // Hack for allowing ISpecificationExtension
 }
-
-export type ExamplesObject = Record<string, ExampleObject | ReferenceObject>
+export interface ExamplesObject {
+  [name: string]: ExampleObject | ReferenceObject
+}
 
 export interface ReferenceObject {
   $ref: string
 }
 
-export type SchemaObject = JSONSchema7
+export interface SchemaObject extends ISpecificationExtension {
+  nullable?: boolean
+  discriminator?: DiscriminatorObject
+  readOnly?: boolean
+  writeOnly?: boolean
+  xml?: XmlObject
+  externalDocs?: ExternalDocumentationObject
+  example?: any
+  examples?: any[]
+  deprecated?: boolean
 
-export type SchemasObject = Record<string, SchemaObject>
+  type?: 'integer' | 'number' | 'string' | 'boolean' | 'object' | 'null' | 'array'
+  format?:
+    | 'int32'
+    | 'int64'
+    | 'float'
+    | 'double'
+    | 'byte'
+    | 'binary'
+    | 'date'
+    | 'date-time'
+    | 'password'
+    | string
+  allOf?: (SchemaObject | ReferenceObject)[]
+  oneOf?: (SchemaObject | ReferenceObject)[]
+  anyOf?: (SchemaObject | ReferenceObject)[]
+  not?: SchemaObject | ReferenceObject
+  items?: SchemaObject | ReferenceObject
+  properties?: { [propertyName: string]: SchemaObject | ReferenceObject }
+  additionalProperties?: SchemaObject | ReferenceObject | boolean
+  description?: string
+  default?: any
+
+  title?: string
+  multipleOf?: number
+  maximum?: number
+  exclusiveMaximum?: boolean
+  minimum?: number
+  exclusiveMinimum?: boolean
+  maxLength?: number
+  minLength?: number
+  pattern?: string
+  maxItems?: number
+  minItems?: number
+  uniqueItems?: boolean
+  maxProperties?: number
+  minProperties?: number
+  required?: string[]
+  enum?: any[]
+}
+
+/**
+ * A type guard to check if the given object is a `SchemaObject`.
+ * Useful to distinguish from `ReferenceObject` values that can be used
+ * in most places where `SchemaObject` is allowed.
+ *
+ * See https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types
+ *
+ * @param schema The value to check.
+ */
+export function isSchemaObject(schema: SchemaObject | ReferenceObject): schema is SchemaObject {
+  return typeof schema.$ref === 'undefined'
+}
+
+/**
+ * A type guard to check if the given value is a `ReferenceObject`.
+ * See https://www.typescriptlang.org/docs/handbook/advanced-types.html#type-guards-and-differentiating-types
+ *
+ * @param obj The value to check.
+ */
+export function isReferenceObject(
+  schema: SchemaObject | ReferenceObject
+): schema is ReferenceObject {
+  return !isSchemaObject(schema)
+}
+
+export interface SchemasObject {
+  [schema: string]: SchemaObject
+}
 
 export interface DiscriminatorObject {
   propertyName: string
-  mapping?: Record<string, string>
+  mapping?: { [key: string]: string }
 }
 
-export interface XmlObject {
+export interface XmlObject extends ISpecificationExtension {
   name?: string
   namespace?: string
   prefix?: string
   attribute?: boolean
   wrapped?: boolean
 }
-
 export type SecuritySchemeType = 'apiKey' | 'http' | 'oauth2' | 'openIdConnect'
 
-export interface SecuritySchemeObject {
+export interface SecuritySchemeObject extends ISpecificationExtension {
   type: SecuritySchemeType
   description?: string
-  name?: string
-  in?: string
-  scheme?: string
+  name?: string // required only for apiKey
+  in?: string // required only for apiKey
+  scheme?: string // required only for http
   bearerFormat?: string
-  flows?: OAuthFlowsObject
-  openIdConnectUrl?: string
+  flows?: OAuthFlowsObject // required only for oauth2
+  openIdConnectUrl?: string // required only for openIdConnect
 }
-
-export interface OAuthFlowsObject {
+export interface OAuthFlowsObject extends ISpecificationExtension {
   implicit?: OAuthFlowObject
   password?: OAuthFlowObject
   clientCredentials?: OAuthFlowObject
   authorizationCode?: OAuthFlowObject
 }
-
-export interface OAuthFlowObject {
+export interface OAuthFlowObject extends ISpecificationExtension {
   authorizationUrl?: string
   tokenUrl?: string
   refreshUrl?: string
   scopes: ScopesObject
 }
-
-export type ScopesObject = Record<string, any>
-export type SecurityRequirementObject = Record<string, string[]>
+export interface ScopesObject extends ISpecificationExtension {
+  [scope: string]: any // Hack for allowing ISpecificationExtension
+}
+export interface SecurityRequirementObject {
+  [name: string]: string[]
+}

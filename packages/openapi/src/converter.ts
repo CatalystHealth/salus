@@ -1,6 +1,6 @@
 import { Codec } from '@salus-js/codec'
 
-import type { JSONSchema7 } from './definition'
+import type { SchemaObject } from './openapi'
 import { SchemaVisitor } from './visitor'
 
 export interface SchemaConverter {
@@ -12,5 +12,5 @@ export interface SchemaConverter {
    * @param next pass to the next converter in the chain
    * @return the converted schema
    */
-  convert(codec: Codec<any>, visitor: SchemaVisitor, next: () => JSONSchema7): JSONSchema7
+  convert(codec: Codec<any>, visitor: SchemaVisitor, next: () => SchemaObject): SchemaObject
 }

@@ -7,49 +7,25 @@ import {
   Delete,
   Patch
 } from '@nestjs/common'
-import { Codec, ValidationFailedError } from '@salus-js/codec'
-import { Operation as ApiOperation } from '@salus-js/openapi'
+import { Methods, Operation as ApiOperation } from '@salus-js/http'
 import { Request } from 'express'
 
 import { OPERATION_METADATA_KEY } from './constants'
 
-function decodeIfNecessary<A>(codec: Codec<A, any> | undefined, value: unknown): A | null {
-  if (!codec) {
-    return null
-  }
-
-  const result = codec.decode(value)
-  if (!result.success) {
-    throw new ValidationFailedError(result.errors)
-  }
-
-  return result.value
+type DecoratorsMap = { [K in Methods]: (path: string) => MethodDecorator }
+const decoratorsMap: DecoratorsMap = {
+  get: Get,
+  post: Post,
+  put: Put,
+  delete: Delete,
+  patch: Patch
 }
 
 /* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-unsafe-call */
-export function Operation(operation: ApiOperation): MethodDecorator {
-  let decoratorFactory: (path: string) => MethodDecorator
-  switch (operation.opts.method) {
-    case 'GET':
-      decoratorFactory = Get
-      break
-    case 'POST':
-      decoratorFactory = Post
-      break
-    case 'PUT':
-      decoratorFactory = Put
-      break
-    case 'DELETE':
-      decoratorFactory = Delete
-      break
-    case 'PATCH':
-      decoratorFactory = Patch
-      break
-    default:
-      throw new Error(`Unknown HTTP method: ${operation.opts.method}`)
-  }
+export function Operation(operation: ApiOperation<any, any, any, any>): MethodDecorator {
+  const decoratorFactory = decoratorsMap[operation.options.method]
+  const decorator = decoratorFactory(operation.options.path)
 
-  const decorator = decoratorFactory(operation.opts.path)
   return <T>(
     target: Object,
     propertyKey: string | symbol,
@@ -69,9 +45,9 @@ export function Operation(operation: ApiOperation): MethodDecorator {
 export const Input = createParamDecorator((_data: void, ctx: ExecutionContext) => {
   const request: Request = ctx.switchToHttp().getRequest<Request>()
   const operation = Reflect.getMetadata(OPERATION_METADATA_KEY, ctx.getHandler()) as ApiOperation
-  const body = decodeIfNecessary(operation.opts.body, request.body)
-  const params = decodeIfNecessary(operation.opts.params, request.params)
-  const query = decodeIfNecessary(operation.opts.query, request.query)
+  const body = operation.decodeBody(request.body)
+  const params = operation.decodeParams(request.params)
+  const query = operation.decodeQuery(request.query)
 
   return {
     body,

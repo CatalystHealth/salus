@@ -1,12 +1,12 @@
-import { BaseCodec, Codec } from '@salus-js/codec'
+import { BaseCodec, Codec, OptionalCodec } from '@salus-js/codec'
 
 import { SchemaConverter } from './converter'
 import { defaultConverters } from './converters'
-import type { JSONSchema7 } from './definition'
+import { ReferenceObject, SchemaObject } from './openapi'
 
 interface SchemaVisitorOptions {
   readonly converters: SchemaConverter[]
-  readonly namedSchemaVisitor?: (name: string, generate: () => JSONSchema7) => void
+  readonly namedSchemaVisitor?: (name: string, generate: () => SchemaObject) => void
   readonly referenceRoot?: string
 }
 
@@ -34,20 +34,21 @@ export class SchemaVisitor {
    * @param codec the codec that needs to be converted
    * @returns the converted OpenAPI schema
    */
-  public convert(codec: Codec<any>): JSONSchema7 {
-    const name = this.isBaseCodec(codec) ? codec.options.name : null
+  public convert(codec: Codec<any>): SchemaObject | ReferenceObject {
+    const actualCodec = codec instanceof OptionalCodec ? codec.innerCodec : codec
+    const name = this.isBaseCodec(actualCodec) ? actualCodec.options.name : null
     if (name) {
       if (this.options.namedSchemaVisitor) {
-        this.options.namedSchemaVisitor(name, () => this.doConvert(codec))
+        this.options.namedSchemaVisitor(name, () => this.doConvert(actualCodec))
       }
 
       return { $ref: `#${this.options.referenceRoot || ''}/${name}` }
     }
 
-    return this.doConvert(codec)
+    return this.doConvert(actualCodec)
   }
 
-  private doConvert(codec: Codec<any>): JSONSchema7 {
+  private doConvert(codec: Codec<any>): SchemaObject {
     let index = 0
     const next = () => {
       if (index > this.options.converters.length - 1) {
