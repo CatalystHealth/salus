@@ -1,7 +1,7 @@
 import { Codec } from '../codec'
 import { Context } from '../context'
 import { Constraint, Refinement, RefinementOptions } from '../refinement'
-import { Validation } from '../validation'
+import { failure, Validation } from '../validation'
 
 import { OptionalCodec, NullableCodec } from './'
 
@@ -33,7 +33,13 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
   }
 
   public is(value: unknown, context: Context = Context.create(this)): value is A {
-    return this.doIs(value, context)
+    if (!this.doIs(value, context)) {
+      return false
+    }
+
+    return (this.options.refinements || []).every(({ constraint, arguments: args }) =>
+      constraint(value, args)
+    )
   }
 
   public encode(value: A, context: Context = Context.create(this)): O {
@@ -41,7 +47,16 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
   }
 
   public decode(value: unknown, context: Context = Context.create(this)): Validation<A> {
-    return this.doDecode(value, context)
+    const result = this.doDecode(value, context)
+    if (!result.success) {
+      return result
+    }
+
+    for (const refinement of this.options.refinements || []) {
+      if (!refinement.constraint(result.value, refinement.arguments)) {
+        return failure(context, value, refinement.message || 'invalid')
+      }
+    }
   }
 
   /**
