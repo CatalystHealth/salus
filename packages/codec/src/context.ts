@@ -41,12 +41,13 @@ export class Context {
    * @returns a new context object
    */
   public enter(key: string, codec: Codec<any>): Context {
-    return new Context(
-      this.entries.concat({
+    return new Context([
+      ...this.entries,
+      {
         key,
         codec
-      })
-    )
+      }
+    ])
   }
 
   static create(codec: Codec<any>): Context {

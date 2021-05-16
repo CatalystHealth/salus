@@ -65,12 +65,11 @@ export class ObjectCodec<P extends Props> extends BaseCodec<TypeOfProps<P>, Outp
       return failure(context, value, 'must be an object')
     }
 
-    const requiredKeys: Set<string> = new Set([...this.requiredProperties])
-    const providedKeys = new Set([...Object.keys(value)])
+    let seenRequiredKeys = 0
     const output: Record<string, unknown> = {}
     const errors: ValidationError[] = []
     for (const key of this.properties) {
-      if (!providedKeys.has(key)) {
+      if (!Object.prototype.hasOwnProperty.call(value, key)) {
         continue
       }
 
@@ -83,11 +82,17 @@ export class ObjectCodec<P extends Props> extends BaseCodec<TypeOfProps<P>, Outp
         output[key] = result.value
       }
 
-      requiredKeys.delete(key)
+      if (this.requiredProperties.has(key)) {
+        seenRequiredKeys++
+      }
     }
 
-    if (requiredKeys.size > 0) {
-      return failure(context, value, `missing required keys: ${[...requiredKeys].join(', ')}`)
+    if (seenRequiredKeys < this.requiredProperties.size) {
+      const missingKeys = [...this.requiredProperties].filter(
+        (prop) => !Object.prototype.hasOwnProperty.call(value, prop)
+      )
+
+      return failure(context, value, `missing required keys: ${[...missingKeys].join(', ')}`)
     }
 
     if (errors.length > 0) {

@@ -55,15 +55,17 @@ class AppModule {
 }
 ```
 
-# Interceptor
+# Guide
 
-Salus requires a custom NestJS interceptor to be registered in order for your responses to be serialized correctly. This serializer is automatically registered with the `SalusModule`.
+Under the hood, there's very little magic happening with `@salus-js/nestjs`. The `@Operation()` module simply looks at the provided `Operation` instance and registers the appropriate NestJS controller annotation (`@Post()`/`@Get()`/etc) for you. Similarly, `@Input()` is implemented using standard NestJS functionality available through `createParamDecorator`.
 
-# Registry
+What this means is that Salus retains full compatibility with all standard NestJS controllers. For many use cases, this provides the best balance of type safety with ergonomics in the NestJS ecosystem.
+
+## Registry
 
 When using the Salus NestJS module, you get access to an instance of `OperationRegistry` that can provide you access to all operations that have been mounted in the NestJS. You can inject `OperationRegistry` from `@salus-js/nestjs` in any module.
 
-# OpenAPI
+## OpenAPI
 
 The NestJS module also supports automatically generating OpenAPI documents. You can enable this when importing the Salus module in your application:
 

@@ -1,17 +1,15 @@
 import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common'
-import { Operation } from '@salus-js/http'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { OPERATION_METADATA_KEY } from './constants'
+import { getOperaton } from './utils'
 
 export class SerializationInterceptor implements NestInterceptor {
   public intercept(
     context: ExecutionContext,
     next: CallHandler<any>
   ): Observable<any> | Promise<Observable<any>> {
-    const handler = context.getHandler()
-    const operation = Reflect.getMetadata(OPERATION_METADATA_KEY, handler) as Operation | null
+    const operation = getOperaton(context.getHandler())
     if (!operation) {
       return next.handle()
     }
