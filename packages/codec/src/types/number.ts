@@ -30,7 +30,7 @@ export class NumberCodec extends BaseCodec<number> {
     return this.refine((input, min) => input >= min, {
       type: 'min',
       arguments: min,
-      message: message ?? `must be greater than ${length}`
+      message: message ?? `must be greater than ${min}`
     })
   }
 
