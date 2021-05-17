@@ -25,4 +25,20 @@ export class NumberCodec extends BaseCodec<number> {
   protected with(options: CodecOptions<number>): BaseCodec<number> {
     return new NumberCodec(options)
   }
+
+  public min(min: number, message?: string): NumberCodec {
+    return this.refine((input, min) => input >= min, {
+      type: 'min',
+      arguments: min,
+      message: message ?? `must be greater than ${length}`
+    })
+  }
+
+  public max(max: number, message?: string): NumberCodec {
+    return this.refine((input, max) => input <= max, {
+      type: 'max',
+      arguments: max,
+      message: message ?? `must be less than ${max}`
+    })
+  }
 }

@@ -128,6 +128,22 @@ export class ObjectCodec<P extends Props> extends BaseCodec<TypeOfProps<P>, Outp
     return ObjectCodec.partial(this.props)
   }
 
+  public omit<K extends keyof P>(keys: K[]): ObjectCodec<Omit<P, K>> {
+    const copiedProps = { ...this.props }
+    for (const key of keys) {
+      delete copiedProps[key]
+    }
+
+    return (new ObjectCodec(copiedProps) as unknown) as ObjectCodec<Omit<P, K>>
+  }
+
+  public extend<OP extends Props>(otherProps: OP): ObjectCodec<Omit<P, keyof OP> & OP> {
+    return (new ObjectCodec({
+      ...this.props,
+      ...otherProps
+    }) as unknown) as ObjectCodec<Omit<P, keyof OP> & OP>
+  }
+
   public static partial<P extends Props>(props: P): ObjectCodec<Partialize<P>> {
     return new ObjectCodec(
       Object.fromEntries(
