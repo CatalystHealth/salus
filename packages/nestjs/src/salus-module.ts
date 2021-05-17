@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core'
 import { OpenAPIInputOptions } from '@salus-js/openapi'
-import { Request, Response } from 'express'
+import type { Request, Response } from 'express'
 
 import { MODULE_OPTIONS_TOKEN } from './constants'
 import { OperationRegistry } from './operation-registry'

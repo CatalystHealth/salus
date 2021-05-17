@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/nestjs",
-  "version": "0.4.3-alpha.0",
+  "version": "0.4.3",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,13 +21,12 @@
     "build": "tsc --project tsconfig.build.json",
     "test": "jest --config ../../jest.config.js"
   },
-  "dependencies": {
-    "@salus-js/codec": "^0.4.3-alpha.0",
-    "@salus-js/openapi": "^0.4.3-alpha.0"
-  },
   "devDependencies": {
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
+    "@salus-js/codec": "^0.4.3",
+    "@salus-js/http": "^0.4.3",
+    "@salus-js/openapi": "^0.4.3",
     "@types/express": "^4.17.11",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.1"
@@ -35,6 +34,9 @@
   "peerDependencies": {
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
+    "@salus-js/codec": "*",
+    "@salus-js/http": "*",
+    "@salus-js/openapi": "*",
     "rxjs": "^7.0.1"
   },
   "publishConfig": {
