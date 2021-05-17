@@ -5,12 +5,14 @@ import { BaseCodec, CodecOptions } from './'
 
 export class EnumCodec<E extends string> extends BaseCodec<E, string> {
   public readonly _tag = 'EnumCodec' as const
-  private readonly enumValues: Set<string>
+  public readonly enumValues: Set<string>
 
-  constructor(public readonly enumObject: Record<string, E>, options: CodecOptions<E> = {}) {
+  constructor(private readonly enumObject: Record<string, E> | E[], options: CodecOptions<E> = {}) {
     super(options)
 
-    this.enumValues = new Set(Object.values(enumObject))
+    this.enumValues = Array.isArray(enumObject)
+      ? new Set(enumObject)
+      : new Set(Object.values(enumObject))
   }
 
   protected doIs(value: unknown): value is E {

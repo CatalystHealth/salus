@@ -1,6 +1,7 @@
 import { ArrayConverter } from './array'
 import { BooleanConverter } from './boolean'
 import { DateConverter } from './date'
+import { EnumConverter } from './enum'
 import { LiteralConverter } from './literal'
 import { NullableConverter } from './nullable'
 import { NumberConverter } from './number'
@@ -19,5 +20,6 @@ export const defaultConverters = [
   LiteralConverter,
   StringConverter,
   UnionConverter,
-  RecordConverter
+  RecordConverter,
+  EnumConverter
 ]
