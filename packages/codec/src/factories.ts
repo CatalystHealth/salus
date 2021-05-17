@@ -14,7 +14,8 @@ import {
   BaseCodec,
   LazyCodec,
   NullCodec,
-  RecordCodec
+  RecordCodec,
+  UnknownCodec
 } from './types'
 import { UnionCodec } from './types/union'
 
@@ -23,6 +24,7 @@ const date = new DateCodec()
 const number = new NumberCodec()
 const string = new StringCodec()
 const nullType = new NullCodec()
+const unknown = new UnknownCodec()
 
 function enumFactory<T extends string>(value: Record<string, T> | ReadonlyArray<T>): EnumCodec<T> {
   return new EnumCodec(value)
@@ -74,5 +76,6 @@ export {
   partial,
   record,
   string,
+  unknown,
   union
 }
