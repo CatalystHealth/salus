@@ -7,7 +7,10 @@ export class EnumCodec<E extends string> extends BaseCodec<E, string> {
   public readonly _tag = 'EnumCodec' as const
   public readonly enumValues: Set<string>
 
-  constructor(private readonly enumObject: Record<string, E> | E[], options: CodecOptions<E> = {}) {
+  constructor(
+    private readonly enumObject: Record<string, E> | ReadonlyArray<E>,
+    options: CodecOptions<E> = {}
+  ) {
     super(options)
 
     this.enumValues = Array.isArray(enumObject)

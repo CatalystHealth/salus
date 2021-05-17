@@ -24,7 +24,7 @@ const number = new NumberCodec()
 const string = new StringCodec()
 const nullType = new NullCodec()
 
-function enumFactory<T extends string>(value: Record<string, T> | T[]): EnumCodec<T> {
+function enumFactory<T extends string>(value: Record<string, T> | ReadonlyArray<T>): EnumCodec<T> {
   return new EnumCodec(value)
 }
 
