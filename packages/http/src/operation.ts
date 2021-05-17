@@ -55,10 +55,10 @@ export class Operation<
 > {
   readonly _P!: TypeOf<TParams>
   readonly _Q!: TypeOf<TQuery>
-  readonly _B!: TypeOf<TQuery>
+  readonly _B!: TypeOf<TBody>
   readonly _R!: TypeOf<TResponse>
 
-  private readonly compiledPath: PathFunction<OutputOf<TParams>>
+  private readonly compiledPath: PathFunction<any>
 
   constructor(public readonly options: OperationOptions<TParams, TQuery, TBody, TResponse>) {
     this.compiledPath = compile(options.path)
