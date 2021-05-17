@@ -42,7 +42,7 @@ export class HttpClient {
   >(
     operation: Operation<TParams, TQuery, TBody, TResponse>,
     options?: RequestOptions<TypeOf<TParams>, TypeOf<TQuery>, TypeOf<TBody>>
-  ): Promise<AxiosResponse<TResponse>> {
+  ): Promise<AxiosResponse<TypeOf<TResponse>>> {
     const castOptions = options ?? {}
     const path = operation.formatPath(castOptions.params)
     const query = castOptions.query ? operation.encodeQuery(castOptions.query) : undefined
