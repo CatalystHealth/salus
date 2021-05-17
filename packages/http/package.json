@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/http",
-  "version": "0.5.6",
+  "version": "0.5.7",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -32,7 +32,7 @@
     "path-to-regexp": "^6.2.0"
   },
   "devDependencies": {
-    "@salus-js/codec": "^0.5.6"
+    "@salus-js/codec": "^0.5.7"
   },
   "peerDependencies": {
     "@salus-js/codec": "*"
