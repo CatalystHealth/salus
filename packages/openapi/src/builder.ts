@@ -53,7 +53,22 @@ export class OpenAPIBuilder {
     this.visitor = new SchemaVisitor({
       referenceRoot: '/components/schemas',
       namedSchemaVisitor: (name, generate) => {
+        /**
+          Ok, let's take a quick breath.
+
+          Codecs can be recursive (through Lazy codecs), as can OpenAPI schemas (through references).
+          A naive implementation would simply check to see if a named schema has been generated, and
+          generate it if necessary before placing it into the document.. This, however, would lead to
+          infinite recursion. While attempting to generate the schema, we would come across the same
+          schema again, which still woudln't be in the document (since we were generating it), and
+          thus it would fail.
+
+          As a result, we do a two-step approach here. First, we add an empty schema to the document.
+          This way when we come across this named schema, it apperas that we have already genearted
+          it in the document, so we don't try to generate it again.
+        */
         if (!this.document.components?.schemas?.[name]) {
+          this.addSchema(name, {})
           this.addSchema(name, generate())
         }
       }

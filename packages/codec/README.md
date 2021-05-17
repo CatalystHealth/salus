@@ -122,6 +122,23 @@ createUserParameters.decode({}) // passes with {}
 createUserParameters.decode({ firstName: 'Salus' }) // passes with { firstName: 'Salus' }
 ```
 
+## Lazy (Recursive Types)
+
+Ocassionally, you'll need to be able to create recursive types. While this is easy using the TypeScript types, it's a little trickier in code. Salus supports a lazy codec that allows you to create these recursive types. It is, unfortunately, a little more verbose than other types, but it's usually much less frequently used.
+
+```typescript
+import { t } from '@salus-js/codec'
+
+const jsonValue = t.union([
+  t.string,
+  t.number,
+  t.boolean,
+  t.null,
+  t.array(t.lazy(() => jsonValue),
+  t.record(t.string, t.lazy(() => jsonValue))
+])
+```
+
 # Custom Codecs
 
 While Salus comes with a number of pre-built codecs out of the box, sometimes you'll want to write your own. Let's look at a custom codec that converts a Date to its Unix timestamp

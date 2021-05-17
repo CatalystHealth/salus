@@ -1,4 +1,5 @@
 import { Codec } from './codec'
+import { Any } from './infer'
 import {
   ArrayCodec,
   NumberCodec,
@@ -10,13 +11,18 @@ import {
   EnumCodec,
   Partialize,
   DateCodec,
-  BaseCodec
+  BaseCodec,
+  LazyCodec,
+  NullCodec,
+  RecordCodec
 } from './types'
+import { UnionCodec } from './types/union'
 
 const boolean = new BooleanCodec()
 const date = new DateCodec()
 const number = new NumberCodec()
 const string = new StringCodec()
+const nullType = new NullCodec()
 
 function enumFactory<T extends string>(value: Record<string, T>): EnumCodec<T> {
   return new EnumCodec(value)
@@ -42,15 +48,31 @@ function named<C extends BaseCodec<any, any>>(name: string, codec: C): C {
   return codec.named(name)
 }
 
+function union<CS extends [Any, Any, ...Any[]]>(codecs: CS): UnionCodec<CS> {
+  return new UnionCodec(codecs)
+}
+
+function lazy<A, O = A>(resolver: () => Codec<A, O>): LazyCodec<A, O> {
+  return new LazyCodec(resolver)
+}
+
+function record<K extends Any, V extends Any>(key: K, value: V): RecordCodec<K, V> {
+  return new RecordCodec(key, value)
+}
+
 export {
   array,
   boolean,
   date,
   enumFactory as enum,
+  lazy,
   literal,
   named,
+  nullType as null,
   number,
   object,
   partial,
-  string
+  record,
+  string,
+  union
 }

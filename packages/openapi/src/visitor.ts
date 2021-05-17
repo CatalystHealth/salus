@@ -1,4 +1,4 @@
-import { BaseCodec, Codec, OptionalCodec } from '@salus-js/codec'
+import { BaseCodec, Codec, LazyCodec, OptionalCodec } from '@salus-js/codec'
 
 import { SchemaConverter } from './converter'
 import { defaultConverters } from './converters'
@@ -35,7 +35,12 @@ export class SchemaVisitor {
    * @returns the converted OpenAPI schema
    */
   public convert(codec: Codec<any>): SchemaObject | ReferenceObject {
-    const actualCodec = codec instanceof OptionalCodec ? codec.innerCodec : codec
+    const actualCodec =
+      codec instanceof OptionalCodec
+        ? codec.innerCodec
+        : codec instanceof LazyCodec
+        ? codec.codec
+        : codec
     const name = this.isBaseCodec(actualCodec) ? actualCodec.options.name : null
     if (name) {
       if (this.options.namedSchemaVisitor) {

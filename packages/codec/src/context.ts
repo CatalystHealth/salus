@@ -50,6 +50,24 @@ export class Context {
     ])
   }
 
+  /**
+   * Replaces the current codec in the stack with a new one, without adding a new path entry
+   *
+   * @param key the key we're entering in the context
+   * @param codec the codec type that we're entering
+   * @returns a new context object
+   */
+  public replace(codec: Codec<any>): Context {
+    const current = this.current
+    return new Context([
+      ...this.entries.slice(0, this.entries.length - 1),
+      {
+        key: current.key,
+        codec
+      }
+    ])
+  }
+
   static create(codec: Codec<any>): Context {
     return new Context([
       {

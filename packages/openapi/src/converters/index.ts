@@ -5,7 +5,9 @@ import { LiteralConverter } from './literal'
 import { NullableConverter } from './nullable'
 import { NumberConverter } from './number'
 import { ObjectConverter } from './object'
+import { RecordConverter } from './record'
 import { StringConverter } from './string'
+import { UnionConverter } from './union'
 
 export const defaultConverters = [
   ArrayConverter,
@@ -15,5 +17,7 @@ export const defaultConverters = [
   NumberConverter,
   ObjectConverter,
   LiteralConverter,
-  StringConverter
+  StringConverter,
+  UnionConverter,
+  RecordConverter
 ]

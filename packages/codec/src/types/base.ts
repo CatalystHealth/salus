@@ -5,6 +5,8 @@ import { failure, Validation } from '../validation'
 
 import { OptionalCodec, NullableCodec } from './'
 
+const emptyRefinements: Refinement<any, any>[] = []
+
 export interface CodecOptions<A> {
   /**
    * Well known name for this codec
@@ -37,7 +39,7 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
       return false
     }
 
-    return (this.options.refinements || []).every(({ constraint, arguments: args }) =>
+    return (this.options.refinements || emptyRefinements).every(({ constraint, arguments: args }) =>
       constraint(value, args)
     )
   }
@@ -52,7 +54,7 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
       return result
     }
 
-    for (const refinement of this.options.refinements || []) {
+    for (const refinement of this.options.refinements || emptyRefinements) {
       if (!refinement.constraint(result.value, refinement.arguments)) {
         return failure(context, value, refinement.message || 'invalid')
       }
@@ -81,7 +83,7 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
     return this.with({
       ...this.options,
       refinements: [
-        ...(this.options.refinements || []),
+        ...(this.options.refinements || emptyRefinements),
         {
           constraint,
           ...overrideOptions

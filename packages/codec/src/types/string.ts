@@ -25,4 +25,32 @@ export class StringCodec extends BaseCodec<string> {
   protected with(options: CodecOptions<string>): BaseCodec<string> {
     return new StringCodec(options)
   }
+
+  public notEmpty(message?: string): StringCodec {
+    return this.minLength(1, message ?? 'must not be empty')
+  }
+
+  public minLength(length: number, message?: string): StringCodec {
+    return this.refine((input, len) => input.length >= len, {
+      type: 'minLength',
+      arguments: length,
+      message: message ?? `must be at least ${length} characters`
+    })
+  }
+
+  public maxLength(length: number, message?: string): StringCodec {
+    return this.refine((input, len) => input.length <= len, {
+      type: 'maxLength',
+      arguments: length,
+      message: message ?? `must be no more than ${length} characters`
+    })
+  }
+
+  public pattern(pattern: RegExp, message?: string): StringCodec {
+    return this.refine((input, pattern) => pattern.test(input), {
+      type: 'pattern',
+      arguments: pattern,
+      message: message ?? `must match ${pattern.source}`
+    })
+  }
 }

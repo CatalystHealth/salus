@@ -12,11 +12,15 @@ export class OptionalCodec<A, O = A> extends BaseCodec<A | undefined, O | undefi
   }
 
   protected doIs(value: unknown, context: Context): value is A | undefined {
-    return typeof value === 'undefined' || this.innerCodec.is(value, context)
+    return (
+      typeof value === 'undefined' || this.innerCodec.is(value, context.replace(this.innerCodec))
+    )
   }
 
   protected doEncode(value: A | undefined, context: Context): O | undefined {
-    return typeof value === 'undefined' ? undefined : this.innerCodec.encode(value, context)
+    return typeof value === 'undefined'
+      ? undefined
+      : this.innerCodec.encode(value, context.replace(this.innerCodec))
   }
 
   protected doDecode(value: unknown, context: Context): Validation<A | undefined> {
@@ -24,7 +28,7 @@ export class OptionalCodec<A, O = A> extends BaseCodec<A | undefined, O | undefi
       return success(value)
     }
 
-    return this.innerCodec.decode(value, context)
+    return this.innerCodec.decode(value, context.replace(this.innerCodec))
   }
 
   protected with(options: CodecOptions<A | undefined>): OptionalCodec<A, O> {
