@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common'
 import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core'
 import { Operation } from '@salus-js/http'
-import { OpenAPIOptions } from '@salus-js/openapi'
+import { OpenAPIOptions, toOpenApi } from '@salus-js/openapi'
 import type { Request, Response } from 'express'
 
 import { MODULE_OPTIONS_TOKEN } from './constants'
@@ -66,25 +66,24 @@ export class SalusModule implements NestModule {
   ) {}
 
   public configure(consumer: MiddlewareConsumer): void {
-    const openApi = this.options.openApi
-    if (!openApi) {
+    if (!this.options.openApi) {
       return
     }
 
+    const options = this.options.openApi.options
     const openApiMiddleware = (_req: Request, res: Response) => {
-      const document = this.registry.createOpenApiDocument(
-        {
-          ...openApi.options
-        },
-        this.options.openApi?.filter
-      )
+      const operations = this.registry.scanOperations(this.options.openApi?.filter)
+      const document = toOpenApi({
+        ...options,
+        operations
+      })
 
       res.send(document)
     }
 
     consumer.apply(openApiMiddleware).forRoutes({
       method: RequestMethod.GET,
-      path: openApi.path
+      path: this.options.openApi.path
     })
   }
 
