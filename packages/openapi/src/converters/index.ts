@@ -1,7 +1,8 @@
 import { ArrayConverter } from './array'
 import { BooleanConverter } from './boolean'
-import { DateConverter } from './date'
 import { EnumConverter } from './enum'
+import { IsoDateConverter } from './isoDate'
+import { IsoDateTimeConverter } from './isoDateTime'
 import { LiteralConverter } from './literal'
 import { NullableConverter } from './nullable'
 import { NumberConverter } from './number'
@@ -13,7 +14,8 @@ import { UnionConverter } from './union'
 export const defaultConverters = [
   ArrayConverter,
   BooleanConverter,
-  DateConverter,
+  IsoDateConverter,
+  IsoDateTimeConverter,
   NullableConverter,
   NumberConverter,
   ObjectConverter,

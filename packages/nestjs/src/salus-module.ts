@@ -9,7 +9,8 @@ import {
   Type
 } from '@nestjs/common'
 import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core'
-import { OpenAPIInputOptions } from '@salus-js/openapi'
+import { Operation } from '@salus-js/http'
+import { OpenAPIOptions } from '@salus-js/openapi'
 import type { Request, Response } from 'express'
 
 import { MODULE_OPTIONS_TOKEN } from './constants'
@@ -27,7 +28,8 @@ export interface SalusModuleOptions {
    */
   readonly openApi?: {
     readonly path: string
-    readonly options: OpenAPIInputOptions
+    readonly options: OpenAPIOptions
+    readonly filter?: (operation: Operation) => boolean
   }
 }
 
@@ -70,9 +72,12 @@ export class SalusModule implements NestModule {
     }
 
     const openApiMiddleware = (_req: Request, res: Response) => {
-      const document = this.registry.createOpenApiDocument({
-        ...openApi.options
-      })
+      const document = this.registry.createOpenApiDocument(
+        {
+          ...openApi.options
+        },
+        this.options.openApi?.filter
+      )
 
       res.send(document)
     }
