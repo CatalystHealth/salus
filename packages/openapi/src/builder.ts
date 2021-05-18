@@ -15,7 +15,8 @@ import {
   SecurityRequirementObject,
   SchemaObject,
   OperationObject,
-  isSchemaObject
+  isSchemaObject,
+  ComponentsObject
 } from './openapi'
 import { SchemaVisitor } from './visitor'
 
@@ -24,6 +25,7 @@ export interface OpenAPIOptions {
   readonly tags?: TagObject[]
   readonly servers?: ServerObject[]
   readonly security?: SecurityRequirementObject[]
+  readonly components?: ComponentsObject
   readonly requestBodyFactory?: RequestFactory
   readonly responseBodyFactory?: ResponseFactory
   readonly operations: Operation[]
@@ -39,7 +41,8 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     requestBodyFactory = createRequestFactory('application/json'),
     responseBodyFactory = createResponseFactory('application/json'),
     extraCodecs = [],
-    operations
+    operations,
+    components
   } = providedOptions
 
   const schemas: Record<string, SchemaObject> = {}
@@ -50,7 +53,7 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     security,
     tags,
     paths: {},
-    components: {}
+    components
   }
 
   const visitor = new SchemaVisitor({
@@ -143,6 +146,9 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
   for (const codec of extraCodecs) {
     visitor.convert(codec)
   }
+
+  document.components ||= {}
+  document.components.schemas = schemas
 
   return document
 }
