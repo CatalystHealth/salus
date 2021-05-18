@@ -28,7 +28,7 @@ export interface SalusModuleOptions {
    */
   readonly openApi?: {
     readonly path: string
-    readonly options: OpenAPIOptions
+    readonly options: Omit<OpenAPIOptions, 'operations'>
     readonly filter?: (operation: Operation) => boolean
   }
 }

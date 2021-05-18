@@ -10,6 +10,7 @@ import { ObjectConverter } from './object'
 import { RecordConverter } from './record'
 import { StringConverter } from './string'
 import { UnionConverter } from './union'
+import { UnknownConverter } from './unknown'
 
 export const defaultConverters = [
   ArrayConverter,
@@ -23,5 +24,6 @@ export const defaultConverters = [
   StringConverter,
   UnionConverter,
   RecordConverter,
-  EnumConverter
+  EnumConverter,
+  UnknownConverter
 ]
