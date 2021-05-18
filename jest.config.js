@@ -1,25 +1,7 @@
-const commonConfig = {
-  preset: 'ts-jest',
-  testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/jest/jest-env.ts']
-}
+const path = require('path') // eslint-disable-line
 
-module.exports = {
+module.exports.commonJestConfig = {
   preset: 'ts-jest',
   testEnvironment: 'node',
-  setupFilesAfterEnv: ['<rootDir>/jest/jest-env.ts'],
-  projects: [
-    {
-      preset: 'ts-jest',
-      displayName: 'schema',
-      testMatch: ['<rootDir>/packages/schema/**/*.spec.ts'],
-      ...commonConfig
-    },
-    {
-      preset: 'ts-jest',
-      displayName: 'openapi',
-      testMatch: ['<rootDir>/packages/openapi/**/*.spec.ts'],
-      ...commonConfig
-    }
-  ]
+  setupFilesAfterEnv: [path.join(__dirname, 'jest', 'jest-env.ts')]
 }

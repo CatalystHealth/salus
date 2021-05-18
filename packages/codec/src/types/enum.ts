@@ -23,11 +23,7 @@ export class EnumCodec<E extends string> extends BaseCodec<E, string> {
   }
 
   protected doDecode(value: unknown, context: Context): Validation<E> {
-    if (typeof value !== 'string') {
-      return failure(context, value, 'must be a string')
-    }
-
-    if (!this.enumValues.has(value)) {
+    if (typeof value !== 'string' || !this.enumValues.has(value)) {
       return failure(context, value, `must be one of: ${[...this.enumValues].join(', ')}`)
     }
 
