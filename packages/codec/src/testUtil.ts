@@ -3,7 +3,7 @@ import { Any } from './infer'
 
 export type ExpectedFailure = [string, string]
 
-export interface SuccessfulExpectation {
+export interface SuccessfulDecodeExpectation {
   description: string
   codec: Any
   input: unknown
@@ -11,7 +11,7 @@ export interface SuccessfulExpectation {
   value: unknown
 }
 
-export interface UnsuccessfulExpectation {
+export interface UnsuccessfulDecodeExpectation {
   description: string
   codec: Any
   input: unknown
@@ -19,12 +19,19 @@ export interface UnsuccessfulExpectation {
   errors: ExpectedFailure[]
 }
 
-export function createSuccessfulExpectation<T>(
+export interface EncodeExpectation {
+  description: string
+  codec: Any
+  input: unknown
+  value: unknown
+}
+
+export function decodeSuccessExpectation<T>(
   description: string,
   codec: Codec<T, any>,
   input: unknown,
   value: T
-): SuccessfulExpectation {
+): SuccessfulDecodeExpectation {
   return {
     description,
     codec,
@@ -34,12 +41,12 @@ export function createSuccessfulExpectation<T>(
   }
 }
 
-export function createFailureExpectation(
+export function decodeFailureExpectation(
   description: string,
   codec: Codec<any, any>,
   input: unknown,
   ...errors: ExpectedFailure[]
-): UnsuccessfulExpectation {
+): UnsuccessfulDecodeExpectation {
   return {
     description,
     codec,
@@ -49,8 +56,22 @@ export function createFailureExpectation(
   }
 }
 
+export function encodeExpectation(
+  description: string,
+  codec: Codec<any, any>,
+  input: unknown,
+  value: unknown
+): EncodeExpectation {
+  return {
+    description,
+    codec,
+    input,
+    value
+  }
+}
+
 export function verifyExpectation(
-  expectation: SuccessfulExpectation | UnsuccessfulExpectation
+  expectation: SuccessfulDecodeExpectation | UnsuccessfulDecodeExpectation
 ): void {
   const { codec, input } = expectation
 
@@ -67,9 +88,17 @@ export function verifyExpectation(
 }
 
 export function executeDecodeTests(
-  cases: Array<SuccessfulExpectation | UnsuccessfulExpectation>
+  cases: Array<SuccessfulDecodeExpectation | UnsuccessfulDecodeExpectation>
 ): void {
   for (const testCase of cases) {
     test(testCase.description, () => verifyExpectation(testCase))
+  }
+}
+
+export function executeEncodeTests(cases: Array<EncodeExpectation>): void {
+  for (const testCase of cases) {
+    test(testCase.description, () => {
+      expect(testCase.codec.encode(testCase.input)).toEqual(testCase.value)
+    })
   }
 }

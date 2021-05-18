@@ -10,7 +10,8 @@ import {
   BooleanCodec,
   EnumCodec,
   Partialize,
-  DateCodec,
+  IsoDateCodec,
+  IsoDateTimeCodec,
   BaseCodec,
   LazyCodec,
   NullCodec,
@@ -20,11 +21,13 @@ import {
 import { UnionCodec } from './types/union'
 
 const boolean = new BooleanCodec()
-const date = new DateCodec()
 const number = new NumberCodec()
 const string = new StringCodec()
 const nullType = new NullCodec()
 const unknown = new UnknownCodec()
+
+const isoDate = new IsoDateCodec()
+const isoDateTime = new IsoDateTimeCodec()
 
 function enumFactory<T extends string>(value: Record<string, T> | ReadonlyArray<T>): EnumCodec<T> {
   return new EnumCodec(value)
@@ -65,8 +68,9 @@ function record<K extends Any, V extends Any>(key: K, value: V): RecordCodec<K, 
 export {
   array,
   boolean,
-  date,
   enumFactory as enum,
+  isoDate,
+  isoDateTime,
   lazy,
   literal,
   named,

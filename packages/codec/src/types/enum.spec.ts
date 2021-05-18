@@ -1,8 +1,4 @@
-import {
-  createFailureExpectation,
-  createSuccessfulExpectation,
-  executeDecodeTests
-} from '../testUtil'
+import { decodeFailureExpectation, decodeSuccessExpectation, executeDecodeTests } from '../testUtil'
 
 import { EnumCodec } from './enum'
 
@@ -16,20 +12,20 @@ describe('Enum Codec', () => {
   const stringEnumCodec = new EnumCodec(['one', 'two'])
 
   executeDecodeTests([
-    createSuccessfulExpectation('parse simple enum', codec, 'one', TestEnum.ONE),
-    createFailureExpectation('reject invalid values', codec, 'three', [
+    decodeSuccessExpectation('parse simple enum', codec, 'one', TestEnum.ONE),
+    decodeFailureExpectation('reject invalid values', codec, 'three', [
       '',
       'must be one of: one, two'
     ]),
-    createFailureExpectation('reject invalid types', codec, 11, ['', 'must be one of: one, two'])
+    decodeFailureExpectation('reject invalid types', codec, 11, ['', 'must be one of: one, two'])
   ])
 
   executeDecodeTests([
-    createSuccessfulExpectation('parse simple enum', stringEnumCodec, 'one', 'one'),
-    createFailureExpectation('reject invalid values', stringEnumCodec, 'three', [
+    decodeSuccessExpectation('parse simple enum', stringEnumCodec, 'one', 'one'),
+    decodeFailureExpectation('reject invalid values', stringEnumCodec, 'three', [
       '',
       'must be one of: one, two'
     ]),
-    createFailureExpectation('reject invalid types', codec, 11, ['', 'must be one of: one, two'])
+    decodeFailureExpectation('reject invalid types', codec, 11, ['', 'must be one of: one, two'])
   ])
 })

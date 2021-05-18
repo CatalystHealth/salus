@@ -1,8 +1,4 @@
-import {
-  createFailureExpectation,
-  createSuccessfulExpectation,
-  executeDecodeTests
-} from '../testUtil'
+import { decodeFailureExpectation, decodeSuccessExpectation, executeDecodeTests } from '../testUtil'
 
 import { BooleanCodec } from './boolean'
 import { NumberCodec } from './number'
@@ -18,7 +14,7 @@ describe('Object Codec', () => {
   })
 
   executeDecodeTests([
-    createSuccessfulExpectation(
+    decodeSuccessExpectation(
       'parse valid object',
       codec,
       {
@@ -30,7 +26,7 @@ describe('Object Codec', () => {
         two: 2
       }
     ),
-    createSuccessfulExpectation(
+    decodeSuccessExpectation(
       'parse valid object with optional',
       codec,
       {
@@ -44,7 +40,7 @@ describe('Object Codec', () => {
         three: true
       }
     ),
-    createSuccessfulExpectation(
+    decodeSuccessExpectation(
       'strip extra properties',
       codec,
       {
@@ -57,14 +53,14 @@ describe('Object Codec', () => {
         two: 2
       }
     ),
-    createFailureExpectation(
+    decodeFailureExpectation(
       'not parse invalid keys',
       codec,
       { one: 12, two: 'string' },
       ['one', 'must be a string'],
       ['two', 'must be a number']
     ),
-    createFailureExpectation('not parse when missing invalid keys', codec, {}, [
+    decodeFailureExpectation('not parse when missing invalid keys', codec, {}, [
       '',
       'missing required keys: one, two'
     ])

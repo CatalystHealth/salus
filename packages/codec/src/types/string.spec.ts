@@ -1,7 +1,9 @@
 import {
-  createFailureExpectation,
-  createSuccessfulExpectation,
-  executeDecodeTests
+  decodeFailureExpectation,
+  decodeSuccessExpectation,
+  encodeExpectation,
+  executeDecodeTests,
+  executeEncodeTests
 } from '../testUtil'
 
 import { StringCodec } from './string'
@@ -9,31 +11,33 @@ import { StringCodec } from './string'
 describe('String Codec', () => {
   const codec = new StringCodec()
 
+  executeEncodeTests([encodeExpectation('encode simple string', codec, 'hello', 'hello')])
+
   executeDecodeTests([
-    createSuccessfulExpectation('parse simple string', codec, 'hello', 'hello'),
-    createSuccessfulExpectation(
+    decodeSuccessExpectation('parse simple string', codec, 'hello', 'hello'),
+    decodeSuccessExpectation(
       'parse simple string with length',
       codec.minLength(1).maxLength(3),
       'te',
       'te'
     ),
-    createSuccessfulExpectation(
+    decodeSuccessExpectation(
       'parse simple string with pattern',
       codec.pattern(/^hello$/),
       'hello',
       'hello'
     ),
-    createFailureExpectation('not parse numbers', codec, 1, ['', 'must be a string']),
-    createFailureExpectation('not parse booleans', codec, false, ['', 'must be a string']),
-    createFailureExpectation('respect minLength', codec.minLength(1), '', [
+    decodeFailureExpectation('not parse numbers', codec, 1, ['', 'must be a string']),
+    decodeFailureExpectation('not parse booleans', codec, false, ['', 'must be a string']),
+    decodeFailureExpectation('respect minLength', codec.minLength(1), '', [
       '',
       'must be at least 1 characters'
     ]),
-    createFailureExpectation('respect maxLength', codec.maxLength(1), 'asdf', [
+    decodeFailureExpectation('respect maxLength', codec.maxLength(1), 'asdf', [
       '',
       'must be no more than 1 characters'
     ]),
-    createFailureExpectation('respect pattern', codec.pattern(/^hello$/), 'hello world', [
+    decodeFailureExpectation('respect pattern', codec.pattern(/^hello$/), 'hello world', [
       '',
       'must match ^hello$'
     ])

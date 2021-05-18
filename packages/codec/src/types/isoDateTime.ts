@@ -1,10 +1,10 @@
 import { Context } from '../context'
 import { failure, success, Validation } from '../validation'
 
-import { BaseCodec, CodecOptions } from './'
+import { BaseCodec, CodecOptions } from '.'
 
-export class DateCodec extends BaseCodec<Date, string> {
-  readonly _tag = 'DateCodec' as const
+export class IsoDateTimeCodec extends BaseCodec<Date, string> {
+  readonly _tag = 'IsoDateTimeCodec' as const
 
   protected doIs(value: unknown): value is Date {
     return value instanceof Date
@@ -27,7 +27,7 @@ export class DateCodec extends BaseCodec<Date, string> {
     return success(parsed)
   }
 
-  protected with(options: CodecOptions<Date>): DateCodec {
-    return new DateCodec(options)
+  protected with(options: CodecOptions<Date>): IsoDateTimeCodec {
+    return new IsoDateTimeCodec(options)
   }
 }
