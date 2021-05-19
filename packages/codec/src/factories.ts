@@ -16,7 +16,8 @@ import {
   LazyCodec,
   NullCodec,
   RecordCodec,
-  UnknownCodec
+  UnknownCodec,
+  ConcreteCodec
 } from './types'
 import { UnionCodec } from './types/union'
 
@@ -49,8 +50,8 @@ function partial<P extends Props>(codec: P): ObjectCodec<Partialize<P>> {
   return ObjectCodec.partial(codec)
 }
 
-function named<C extends BaseCodec<any, any>>(name: string, codec: C): C {
-  return codec.named(name)
+function named<A, O>(name: string, codec: Codec<A, O>): ConcreteCodec<A, O> {
+  return new ConcreteCodec(name, codec)
 }
 
 function union<CS extends [Any, Any, ...Any[]]>(codecs: CS): UnionCodec<CS> {

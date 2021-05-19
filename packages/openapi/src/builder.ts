@@ -2,22 +2,23 @@ import { Any } from '@salus-js/codec'
 import { Operation } from '@salus-js/http'
 
 import {
-  createRequestFactory,
-  createResponseFactory,
+  createJsonRequestFactory,
+  createJsonResponseFactory,
   RequestFactory,
   ResponseFactory
 } from './factories'
 import {
-  OpenAPIObject,
-  InfoObject,
-  ServerObject,
-  TagObject,
-  SecurityRequirementObject,
-  SchemaObject,
-  OperationObject,
-  isSchemaObject,
   ComponentsObject,
-  ParameterObject
+  InfoObject,
+  isSchemaObject,
+  OpenAPIObject,
+  OperationObject,
+  ParameterObject,
+  ReferenceObject,
+  SchemaObject,
+  SecurityRequirementObject,
+  ServerObject,
+  TagObject
 } from './openapi'
 import { SchemaVisitor } from './visitor'
 
@@ -39,14 +40,14 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     tags = [],
     servers = [],
     security = [],
-    requestBodyFactory = createRequestFactory('application/json'),
-    responseBodyFactory = createResponseFactory('application/json'),
+    requestBodyFactory = createJsonRequestFactory(),
+    responseBodyFactory = createJsonResponseFactory(),
     extraCodecs = [],
     operations,
     components
   } = providedOptions
 
-  const schemas: Record<string, SchemaObject> = {}
+  const schemas: Record<string, SchemaObject | ReferenceObject> = {}
   const document: OpenAPIObject = {
     openapi: '3.0.0',
     info,
@@ -117,7 +118,7 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     if (operation.options.query) {
       const converted = visitor.convert(operation.options.query)
       if (!isSchemaObject(converted) || converted.type !== 'object') {
-        throw new Error('Path parameters must always generate an object schema')
+        throw new Error('Query parameters must always generate an object schema')
       }
 
       const parameters: ParameterObject[] = Object.entries(converted.properties || {}).map(
@@ -143,16 +144,10 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     }
 
     if (operation.options.body) {
-      documentedOperation.requestBody = requestBodyFactory(
-        operation,
-        visitor.convert(operation.options.body)
-      )
+      documentedOperation.requestBody = requestBodyFactory(operation, visitor)
     }
 
-    documentedOperation.responses = responseBodyFactory(
-      operation,
-      visitor.convert(operation.options.response)
-    )
+    documentedOperation.responses = responseBodyFactory(operation, visitor)
 
     const path = operation.formatPath(pathParameters)
     document.paths[path] ||= {}

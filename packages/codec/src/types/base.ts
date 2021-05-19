@@ -3,26 +3,11 @@ import { Context } from '../context'
 import { Constraint, Refinement, RefinementOptions } from '../refinement'
 import { failure, Validation } from '../validation'
 
-import { OptionalCodec, NullableCodec } from './'
+import { ReferenceCodec, ReferenceCodecOptions, NullableCodec, OptionalCodec } from './'
 
 const emptyRefinements: Refinement<any, any>[] = []
 
 export interface CodecOptions<A> {
-  /**
-   * Well known name for this codec
-   */
-  readonly name?: string
-
-  /**
-   * Description of the purpose of this codec
-   */
-  readonly description?: string
-
-  /**
-   * Exmaple of a typical value associated with this codec
-   */
-  readonly example?: A
-
   /**
    * Array of all refinements to apply to the codec
    */
@@ -70,8 +55,6 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
    * @param options the options to attach with the constraint
    * @returns a new codec with the refinement applied
    */
-  public refine(constraint: Constraint<A, void>, message: string): this
-  public refine<P>(constraint: Constraint<A, P>, options: RefinementOptions<A, P>): this
   public refine<P>(constraint: Constraint<A, P>, options: string | RefinementOptions<A, P>): this {
     const overrideOptions =
       typeof options !== 'string'
@@ -93,29 +76,15 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
   }
 
   /**
-   * Assigns a well-known name to this codec
-   *
-   * @param name the new name for the codec
-   * @returns a new codec instance
-   */
-  public named(name: string): this {
-    return this.with({
-      ...this.options,
-      name
-    }) as this
-  }
-
-  /**
    * Attach documentation information to this codec, creating a new instance.
    *
    * @param options the new options to attach to the codec
    * @returns a new codec with the attached options
    */
-  public document(options: Pick<CodecOptions<A>, 'description' | 'example'>): this {
-    return this.with({
-      ...this.options,
-      ...options
-    }) as this
+  public document(
+    options: Pick<ReferenceCodecOptions<A>, 'description' | 'example'>
+  ): ReferenceCodec<A, O> {
+    return new ReferenceCodec(this, options)
   }
 
   /**

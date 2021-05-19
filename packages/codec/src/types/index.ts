@@ -1,5 +1,6 @@
 export { BaseCodec } from './base'
 export type { CodecOptions } from './base'
+export type { ReferenceCodecOptions } from './reference'
 export type { Props, Partialize } from './object'
 
 export { ArrayCodec } from './array'
@@ -19,3 +20,5 @@ export { UnionCodec } from './union'
 export { NullCodec } from './null'
 export { UndefinedCodec } from './undefined'
 export { UnknownCodec } from './unknown'
+export { ReferenceCodec } from './reference'
+export { ConcreteCodec } from './concrete'
