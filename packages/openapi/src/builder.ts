@@ -71,6 +71,10 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     const documentedOperation = {} as OperationObject
     const pathParameters = {} as any
 
+    if (operation.options.summary) {
+      documentedOperation.summary = operation.options.summary
+    }
+
     if (operation.options.description) {
       documentedOperation.description = operation.options.description
     }
