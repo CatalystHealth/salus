@@ -16,7 +16,8 @@ import {
   SchemaObject,
   OperationObject,
   isSchemaObject,
-  ComponentsObject
+  ComponentsObject,
+  ParameterObject
 } from './openapi'
 import { SchemaVisitor } from './visitor'
 
@@ -85,18 +86,24 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
       }
 
       const parameterEntries = Object.entries(converted.properties || {})
-      documentedOperation.parameters ||= []
-      documentedOperation.parameters.push(
-        ...parameterEntries.map(([key, schema]) => ({
+      const parameters: ParameterObject[] = parameterEntries.map(([key, schema]) => {
+        const parameter: ParameterObject = {
           in: 'path' as const,
           style: 'simple' as const,
           explode: true,
           name: key,
           schema: schema,
-          required: true,
-          description: isSchemaObject(schema) ? schema.description : undefined
-        }))
-      )
+          required: true
+        }
+
+        if (isSchemaObject(schema) && schema.description) {
+          parameter.description = schema.description
+        }
+
+        return parameter
+      })
+
+      documentedOperation.parameters ||= parameters
 
       for (const [name] of parameterEntries) {
         pathParameters[name] = `{${name}}`
@@ -109,18 +116,26 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
         throw new Error('Path parameters must always generate an object schema')
       }
 
-      documentedOperation.parameters ||= []
-      documentedOperation.parameters.push(
-        ...Object.entries(converted.properties || {}).map(([key, schema]) => ({
-          in: 'query' as const,
-          style: 'form' as const,
-          explode: true,
-          name: key,
-          schema: schema,
-          required: (converted.required?.indexOf(key) ?? -1) > -1,
-          description: isSchemaObject(schema) ? schema.description : undefined
-        }))
+      const parameters: ParameterObject[] = Object.entries(converted.properties || {}).map(
+        ([key, schema]) => {
+          const parameter: ParameterObject = {
+            in: 'query' as const,
+            style: 'form' as const,
+            explode: true,
+            name: key,
+            schema: schema,
+            required: (converted.required?.indexOf(key) ?? -1) > -1
+          }
+
+          if (isSchemaObject(schema) && schema.description) {
+            parameter.description = schema.description
+          }
+
+          return parameter
+        }
       )
+
+      documentedOperation.parameters ||= parameters
     }
 
     if (operation.options.body) {
