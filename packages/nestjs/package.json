@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/nestjs",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -24,9 +24,9 @@
   "devDependencies": {
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
-    "@salus-js/codec": "^0.6.0",
+    "@salus-js/codec": "^0.7.0",
     "@salus-js/http": "^0.4.3",
-    "@salus-js/openapi": "^0.6.0",
+    "@salus-js/openapi": "^0.7.0",
     "@types/express": "^4.17.11",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.1"
