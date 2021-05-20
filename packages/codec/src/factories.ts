@@ -2,22 +2,22 @@ import { Codec } from './codec'
 import { Any } from './infer'
 import {
   ArrayCodec,
-  NumberCodec,
-  StringCodec,
-  LiteralCodec,
-  ObjectCodec,
-  Props,
   BooleanCodec,
+  ConcreteCodec,
   EnumCodec,
-  Partialize,
   IsoDateCodec,
   IsoDateTimeCodec,
-  BaseCodec,
   LazyCodec,
+  LiteralCodec,
+  LiteralValue,
   NullCodec,
+  NumberCodec,
+  ObjectCodec,
+  Partialize,
+  Props,
   RecordCodec,
-  UnknownCodec,
-  ConcreteCodec
+  StringCodec,
+  UnknownCodec
 } from './types'
 import { UnionCodec } from './types/union'
 
@@ -34,7 +34,7 @@ function enumFactory<T extends string>(value: Record<string, T> | ReadonlyArray<
   return new EnumCodec(value)
 }
 
-function literal<T extends string>(value: T): LiteralCodec<T> {
+function literal<T extends LiteralValue>(value: T): LiteralCodec<T> {
   return new LiteralCodec(value)
 }
 
