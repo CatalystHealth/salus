@@ -1,6 +1,7 @@
 export { BaseCodec } from './base'
 export type { CodecOptions } from './base'
 export type { Props, Partialize } from './object'
+export type { LiteralValue } from './literal'
 
 export { ArrayCodec } from './array'
 export { BooleanCodec } from './boolean'

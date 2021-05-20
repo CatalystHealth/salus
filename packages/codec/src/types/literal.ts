@@ -3,7 +3,7 @@ import { failure, success, Validation } from '../validation'
 
 import { BaseCodec, CodecOptions } from './'
 
-type LiteralValue = string | number | boolean
+export type LiteralValue = string | number | boolean
 
 export class LiteralCodec<T extends LiteralValue = LiteralValue> extends BaseCodec<T> {
   readonly _tag = 'LiteralCodec' as const
