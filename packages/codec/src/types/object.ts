@@ -41,7 +41,7 @@ export class ObjectCodec<P extends Props> extends BaseCodec<TypeOfProps<P>, Outp
     const cachedKeys = Object.keys(props)
     this.properties = new Set([...cachedKeys])
     this.requiredProperties = new Set([
-      ...cachedKeys.filter((key) => this.props[key]._tag !== 'OptionalCodec')
+      ...cachedKeys.filter((key) => !(this.props[key] instanceof OptionalCodec))
     ])
   }
 

@@ -4,25 +4,10 @@ import { Validation } from '../validation'
 
 import { BaseCodec, CodecOptions } from './'
 
-export interface ReferenceCodecOptions<A> extends CodecOptions<A> {
-  /**
-   * Description of the purpose of this codec
-   */
-  readonly description?: string
-
-  /**
-   * Exmaple of a typical value associated with this codec
-   */
-  readonly example?: A
-}
-
 export class ReferenceCodec<A, O> extends BaseCodec<A, O> {
   readonly _tag = 'ReferenceCodec' as const
 
-  constructor(
-    public readonly referenced: Codec<A, O>,
-    public readonly options: ReferenceCodecOptions<A> = {}
-  ) {
+  constructor(public readonly referenced: Codec<A, O>, options: CodecOptions<A> = {}) {
     super(options)
   }
 
@@ -40,11 +25,5 @@ export class ReferenceCodec<A, O> extends BaseCodec<A, O> {
 
   protected with(options: CodecOptions<A>): ReferenceCodec<A, O> {
     return new ReferenceCodec(this, options)
-  }
-
-  public document(
-    options: Pick<ReferenceCodecOptions<A>, 'description' | 'example'>
-  ): ReferenceCodec<A, O> {
-    return new ReferenceCodec(this.referenced, options)
   }
 }

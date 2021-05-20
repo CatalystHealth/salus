@@ -3,11 +3,20 @@ import { Context } from '../context'
 import { Constraint, Refinement, RefinementOptions } from '../refinement'
 import { failure, Validation } from '../validation'
 
-import { ReferenceCodec, ReferenceCodecOptions, NullableCodec, OptionalCodec } from './'
+import { NullableCodec, OptionalCodec } from './'
 
 const emptyRefinements: Refinement<any, any>[] = []
 
 export interface CodecOptions<A> {
+  /**
+   * Description of the purpose of this codec
+   */
+  readonly description?: string
+
+  /**
+   * Exmaple of a typical value associated with this codec
+   */
+  readonly example?: A
   /**
    * Array of all refinements to apply to the codec
    */
@@ -81,10 +90,11 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
    * @param options the new options to attach to the codec
    * @returns a new codec with the attached options
    */
-  public document(
-    options: Pick<ReferenceCodecOptions<A>, 'description' | 'example'>
-  ): ReferenceCodec<A, O> {
-    return new ReferenceCodec(this, options)
+  public document(options: Pick<CodecOptions<A>, 'description' | 'example'>): this {
+    return this.with({
+      ...this.options,
+      ...options
+    }) as this
   }
 
   /**

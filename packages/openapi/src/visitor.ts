@@ -1,8 +1,8 @@
-import { Codec, ConcreteCodec } from '@salus-js/codec'
+import { BaseCodec, Codec, ConcreteCodec } from '@salus-js/codec'
 
 import { SchemaConverter } from './converter'
 import { defaultConverters } from './converters'
-import { ReferenceObject, SchemaObject } from './openapi'
+import { isReferenceObject, ReferenceObject, SchemaObject } from './openapi'
 
 interface SchemaVisitorOptions {
   readonly converters: SchemaConverter[]
@@ -59,6 +59,28 @@ export class SchemaVisitor {
       return this.options.converters[index++].convert(codec, this, next)
     }
 
-    return next()
+    const result = next()
+    let schema: SchemaObject | ReferenceObject = result
+
+    if (codec instanceof BaseCodec) {
+      const additionalProperties: SchemaObject = {}
+      if (codec.options.description) {
+        additionalProperties.description = codec.options.description
+      }
+
+      if (codec.options.example) {
+        additionalProperties.example = codec.options.example
+      }
+
+      if (Object.keys(additionalProperties).length > 0) {
+        schema = isReferenceObject(schema) ? { oneOf: [schema] } : schema
+        return {
+          ...schema,
+          ...additionalProperties
+        }
+      }
+    }
+
+    return result
   }
 }

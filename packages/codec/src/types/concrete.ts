@@ -3,7 +3,9 @@ import { Context } from '../context'
 import { Constraint, RefinementOptions } from '../refinement'
 import { Validation } from '../validation'
 
-import { ReferenceCodecOptions, ReferenceCodec, NullableCodec, OptionalCodec } from './'
+import { CodecOptions } from './base'
+
+import { NullableCodec, OptionalCodec, ReferenceCodec } from './'
 
 export class ConcreteCodec<A, O> extends Codec<A, O> {
   readonly _tag = 'ConcreteCodec' as const
@@ -32,9 +34,7 @@ export class ConcreteCodec<A, O> extends Codec<A, O> {
     return new NullableCodec(this)
   }
 
-  public document(
-    options: Pick<ReferenceCodecOptions<A>, 'description' | 'example'>
-  ): ReferenceCodec<A, O> {
+  public document(options: Pick<CodecOptions<A>, 'description' | 'example'>): ReferenceCodec<A, O> {
     return new ReferenceCodec(this, options)
   }
 
