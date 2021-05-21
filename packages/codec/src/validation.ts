@@ -102,3 +102,20 @@ export function failures(errors: ValidationError[]): Invalid {
     errors
   }
 }
+
+/**
+ * Unwraps the validation object and returns the value contained in it
+ *
+ * If the result was invalid, a ValidationFailedError will be thrown to
+ * the caller
+ *
+ * @param validation the validation to unwrap
+ * @return the value contained in the validation
+ */
+export function rejectInvalid<T>(validation: Validation<T>): T {
+  if (!validation.success) {
+    throw new ValidationFailedError(validation.errors)
+  }
+
+  return validation.value
+}
