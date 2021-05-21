@@ -11,7 +11,7 @@ type CustomizableOptions =
   | 'headers'
   | 'baseURL'
 
-interface RequestOptions<TParams, TQuery, TBody>
+export interface RequestOptions<TParams, TQuery, TBody>
   extends Pick<AxiosRequestConfig, CustomizableOptions> {
   readonly params?: TParams
   readonly query?: TQuery
