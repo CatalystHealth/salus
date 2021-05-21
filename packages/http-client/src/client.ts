@@ -19,7 +19,8 @@ export interface RequestOptions<TParams, TQuery, TBody>
 }
 
 export class HttpClient {
-  private readonly axios: AxiosInstance
+  public readonly axios: AxiosInstance
+
   private constructor(baseURL: string, options: AxiosRequestConfig = {}) {
     this.axios = axios.create({
       baseURL,
