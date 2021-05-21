@@ -43,11 +43,13 @@ export class HttpClient {
     operation: Operation<TParams, TQuery, TBody, TResponse>,
     options?: RequestOptions<TypeOf<TParams>, TypeOf<TQuery>, TypeOf<TBody>>
   ): Promise<AxiosResponse<TypeOf<TResponse>>> {
-    const castOptions = options ?? {}
-    const path = operation.formatPath(castOptions.params)
-    const query = castOptions.query ? operation.encodeQuery(castOptions.query) : undefined
-    const body = castOptions.body ? operation.encodeBody(castOptions.body) : undefined
+    const { params: inputParams, query: inputQuery, body: inputBody, ...otherOptions } =
+      options ?? {}
+    const path = operation.formatPath(inputParams)
+    const query = inputQuery ? operation.encodeQuery(inputQuery) : undefined
+    const body = inputBody ? operation.encodeBody(inputBody) : undefined
     const response = await this.axios.request({
+      ...otherOptions,
       url: path,
       method: operation.options.method as Method,
       params: query,
