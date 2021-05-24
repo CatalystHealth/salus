@@ -1,6 +1,6 @@
 <div align="center">
   <h1 align="center">
-    <img src="./www/static/img/logo-text.png" alt="Salus" height="100" />
+    <img src="./www/static/img/logo.png" alt="Salus" height="100" />
   </h1>
   <p>Toolkit for building type-safe applications and services</p>
 </div>
