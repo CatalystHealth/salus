@@ -34,7 +34,7 @@ Library for making type-safe HTTP calls built on the Axios client
 
 ## [@salus-js/openapi](/packages/openapi)
 
-Library for converting Salus codecs and operations into OpenAPI-compatible specs
+Library for converting Salus codecs and operations into OpenAPI-compatible specifications
 
 ## [@salus-js/nestjs](/packages/nestjs)
 
