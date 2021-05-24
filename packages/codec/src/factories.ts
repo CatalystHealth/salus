@@ -17,6 +17,7 @@ import {
   Props,
   RecordCodec,
   StringCodec,
+  TupleCodec,
   UnknownCodec
 } from './types'
 import { UnionCodec } from './types/union'
@@ -66,6 +67,21 @@ function record<K extends Any, V extends Any>(key: K, value: V): RecordCodec<K, 
   return new RecordCodec(key, value)
 }
 
+function tuple<A extends Any, B extends Any, C extends Any, D extends Any, E extends Any>(
+  codecs: [A, B, C, D, E]
+): TupleCodec<[A, B, C, D, E]>
+function tuple<A extends Any, B extends Any, C extends Any, D extends Any>(
+  codecs: [A, B, C, D]
+): TupleCodec<[A, B, C, D]>
+function tuple<A extends Any, B extends Any, C extends Any>(
+  codecs: [A, B, C]
+): TupleCodec<[A, B, C]>
+function tuple<A extends Any, B extends Any>(codecs: [A, B]): TupleCodec<[A, B]>
+function tuple<A extends Any>(codecs: [A], name?: string): TupleCodec<[A]>
+function tuple<A extends Any[]>(codecs: A): TupleCodec<A> {
+  return new TupleCodec(codecs)
+}
+
 export {
   array,
   boolean,
@@ -81,6 +97,7 @@ export {
   partial,
   record,
   string,
+  tuple,
   unknown,
   union
 }
