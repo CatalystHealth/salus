@@ -31,7 +31,7 @@
     "@nestjs/platform-express": "^7.6.15",
     "@types/express": "^4.17.11",
     "reflect-metadata": "^0.1.13",
-    "rxjs": "^7.0.1"
+    "rxjs": "*"
   },
   "peerDependencies": {
     "@nestjs/common": "^7.6.15",
