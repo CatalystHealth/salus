@@ -24,9 +24,9 @@
   "devDependencies": {
     "@nestjs/common": "^7.6.15",
     "@nestjs/core": "^7.6.15",
-    "@salus-js/codec": "^0.7.7",
-    "@salus-js/http": "^0.4.3",
-    "@salus-js/openapi": "^0.7.7",
+    "@salus-js/codec": "*",
+    "@salus-js/http": "*",
+    "@salus-js/openapi": "*",
     "@types/express": "^4.17.11",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.0.1"
@@ -37,7 +37,7 @@
     "@salus-js/codec": "*",
     "@salus-js/http": "*",
     "@salus-js/openapi": "*",
-    "rxjs": "^7.0.1"
+    "rxjs": "*"
   },
   "publishConfig": {
     "access": "public"

@@ -18,6 +18,7 @@ import {
   RecordCodec,
   StringCodec,
   TupleCodec,
+  UndefinedCodec,
   UnknownCodec
 } from './types'
 import { UnionCodec } from './types/union'
@@ -27,6 +28,7 @@ const number = new NumberCodec()
 const string = new StringCodec()
 const nullType = new NullCodec()
 const unknown = new UnknownCodec()
+const undefinedType = new UndefinedCodec()
 
 const isoDate = new IsoDateCodec()
 const isoDateTime = new IsoDateTimeCodec()
@@ -98,6 +100,7 @@ export {
   record,
   string,
   tuple,
+  undefinedType as undefined,
   unknown,
   union
 }

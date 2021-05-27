@@ -18,8 +18,8 @@
     "README.md"
   ],
   "devDependencies": {
-    "@salus-js/codec": "^0.7.7",
-    "@salus-js/http": "^0.4.3"
+    "@salus-js/codec": "*",
+    "@salus-js/http": "*"
   },
   "peerDependencies": {
     "@salus-js/codec": "*",

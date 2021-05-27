@@ -37,8 +37,8 @@
   },
   "gitHead": "9153d423f6d2416bbfb957f312379c2d9ad73547",
   "devDependencies": {
-    "@salus-js/codec": "^0.7.7",
-    "@salus-js/http": "^0.4.3",
+    "@salus-js/codec": "*",
+    "@salus-js/http": "*",
     "axios": "^0.21.1"
   },
   "peerDependencies": {
