@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
-    "test": "jest --config ../../jest.config.js"
+    "test": "jest --passWithNoTests"
   },
   "devDependencies": {
     "@nestjs/common": "^7.6.15",
