@@ -28,6 +28,10 @@ describe('ISO Date Codec', () => {
     decodeFailureExpectation('not parse date with time', codec, '1990-10-10T12:10:10.000Z', [
       '',
       'must be a valid date'
+    ]),
+    decodeFailureExpectation('not parse date that does not match the regex', codec, '0', [
+      '',
+      'must be a valid date'
     ])
   ])
 })
