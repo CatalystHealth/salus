@@ -82,6 +82,9 @@ export function verifyExpectation(
     expect(result.errors.map(({ path, message }) => [path.join('.'), message])).toEqual(
       expectation.errors
     )
+  } else if (expectation.success && !result.success) {
+    expect(result.errors).toBe([])
+    expect(result.success).toEqual(expectation.success)
   } else {
     expect(result.success).toEqual(expectation.success)
   }
