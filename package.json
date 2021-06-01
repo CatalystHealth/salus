@@ -27,6 +27,7 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
+    "build": "lerna run build",
     "test": "lerna run test",
     "execute": "-r ts-node/register -r tsconfig-paths/register"
   },
