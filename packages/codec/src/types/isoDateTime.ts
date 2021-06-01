@@ -5,6 +5,8 @@ import { BaseCodec, CodecOptions } from '.'
 
 export class IsoDateTimeCodec extends BaseCodec<Date, string> {
   readonly _tag = 'IsoDateTimeCodec' as const
+  // JS Date object does not handle leap seconds, so no need to expect 60 in the seconds field.
+  private readonly pattern = /^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-2][0-9]:[0-5][0-9]:[0-5][0-9](.[0-9]{3})?Z?$/
 
   protected doIs(value: unknown): value is Date {
     return value instanceof Date
@@ -15,13 +17,13 @@ export class IsoDateTimeCodec extends BaseCodec<Date, string> {
   }
 
   protected doDecode(value: unknown, context: Context): Validation<Date> {
-    if (typeof value !== 'string') {
-      return failure(context, value, 'must be a valid timestamp')
+    if (typeof value !== 'string' || !this.pattern.test(value)) {
+      return failure(context, value, 'must be a valid ISO datetime')
     }
 
     const parsed = new Date(value)
     if (isNaN(parsed.getTime())) {
-      return failure(context, value, 'must be a valid timestamp')
+      return failure(context, value, 'must be a valid ISO datetime')
     }
 
     return success(parsed)
