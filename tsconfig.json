@@ -7,7 +7,8 @@
     }
   },
   "include": [
-    "./packages/*/src/**/*.ts"
+    "./packages/*/src/**/*.ts",
+    "./jest/*.ts"
   ],
   "exclude": [
     "**/node_modules"
