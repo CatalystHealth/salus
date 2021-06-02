@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "build": "tsc --project tsconfig.build.json",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "lint": "eslint --ext .ts,.js src"
   },
   "devDependencies": {
     "@nestjs/common": "^7.6.15",
