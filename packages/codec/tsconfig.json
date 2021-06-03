@@ -3,6 +3,7 @@
   "include": [
     "./src/**/*.ts",
     "./src/**/*.spec.ts",
-    "../../jest/jest.d.ts"
+    "../../jest/jest.d.ts",
+    "../../jest/jest-env.ts",
   ]
 }

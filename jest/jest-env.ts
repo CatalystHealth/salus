@@ -1,6 +1,6 @@
 import fastDeepEqual from 'fast-deep-equal'
 
-import { Validation } from '../packages/codec'
+import { Validation } from '../packages/codec/src/validation'
 
 expect.extend({
   toHaveValidationSuccess: (value: Validation<unknown>, expected: unknown) => {
@@ -17,8 +17,7 @@ expect.extend({
       message: () => `expected ${validation.value as string} to equal ${expected as string}`
     }
   },
-  toHaveValidationFailure: (value: Validation<unknown>, path: string[], message: string) => {
-    const validation = value
+  toHaveValidationFailure: (validation: Validation<unknown>, path: string[], message: string) => {
     if (validation.success) {
       return {
         pass: false,

@@ -1,0 +1,78 @@
+name: CI
+
+on: push
+
+jobs:
+  lint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-eslint-${{ hashFiles('**/yarn.lock') }}
+      - name: Install modules
+        run: yarn --frozen-lockfile
+      - name: Run eslint
+        run: yarn lint
+      - name: Notify Slack (on Failure)
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: 'C01G23GEXGT'
+        run: |
+          bin/slack-ci -f -s ":x: ESLint Failed"
+
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+      - name: Register Problem Matcher
+        run: echo "##[add-matcher].github/matchers/tsc.json"
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-build-${{ hashFiles('**/yarn.lock') }}
+      - name: Install modules
+        run: yarn --frozen-lockfile
+      - name: Run tsc
+        run: yarn build
+      - name: Notify Slack (on Failure)
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: 'C01G23GEXGT'
+        run: |
+          bin/slack-ci -f -s ":x: Build Failed" -m "Typescript build has failed"
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '15'
+      - uses: actions/cache@v2
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-modules-test-runner-${{ hashFiles('**/yarn.lock') }}
+      - name: Install modules
+        run: yarn --frozen-lockfile
+      - name: Run tests
+        run: yarn test
+      - name: Notify Slack (on Failure)
+        if: ${{ failure() && github.ref == 'refs/heads/main' }}
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL: 'C01G23GEXGT'
+        run: |
+          bin/slack-ci -f -s ":x: Tests Failed" -m "Jest tests have failed"
