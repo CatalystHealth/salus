@@ -40,7 +40,7 @@ export class NumberCodec extends BaseCodec<number> {
   }
 
   public lenient(): NumberCodec {
-    return new NumberCodec(true)
+    return new NumberCodec(true, this.options)
   }
 
   public integer(message?: string): NumberCodec {
