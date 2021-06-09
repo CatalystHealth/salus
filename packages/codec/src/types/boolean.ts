@@ -5,7 +5,6 @@ import { BaseCodec, CodecOptions } from './'
 
 export class BooleanCodec extends BaseCodec<boolean> {
   readonly _tag = 'BooleanCodec' as const
-  static readonly possibleValues = ['true', 'false']
 
   constructor(public readonly isLenient: boolean = false, options: CodecOptions<boolean> = {}) {
     super(options)
