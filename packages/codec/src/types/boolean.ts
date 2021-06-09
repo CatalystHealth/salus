@@ -22,7 +22,7 @@ export class BooleanCodec extends BaseCodec<boolean> {
   protected doDecode(value: unknown, context: Context): Validation<boolean> {
     if (typeof value === 'boolean') {
       return success(value)
-    } else if (typeof value === 'string') {
+    } else if (typeof value === 'string' && this.isLenient) {
       const lowerValue = value.toLowerCase()
       if (lowerValue === 'true') {
         return success(true)
