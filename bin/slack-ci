@@ -1,0 +1,123 @@
+#!/bin/bash
+
+# slack-ci
+# A script to report success or failures from GitHub Actions to Slack
+# Usage:
+#
+# --summary SUMMARY    : Required, added as the 'text' / preview of the message.
+#                        Example: ":x: Build failed in ${{ github.repository}}"
+# --message MESSAGE    : Optional, will be the first line of the message.
+# --success | --fail   : Used to set the color (green or red)
+# --channel CHANNEL_ID : Optional, will pull from the environment
+#                        (SLACK_CHANNEL) if not provided.
+
+set -euo pipefail
+
+# In GitHub, all these env vars are set
+readonly git_headline="$(git show --oneline -s $GITHUB_SHA)"
+readonly branch="$(echo "$GITHUB_REF" | awk -F '/' '{ print $NF }')"
+readonly actor="$GITHUB_ACTOR"
+readonly repo="$GITHUB_REPOSITORY"
+readonly commit="$GITHUB_SHA"
+readonly repo_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY"
+readonly run_url="$repo_url/actions/runs/$GITHUB_RUN_ID"
+readonly branch_url="$repo_url/compare/$branch"
+readonly commit_url="$repo_url/commit/$commit"
+readonly job="$GITHUB_WORKFLOW / $GITHUB_JOB"
+
+is_success=1
+summary=""
+message=""
+channel=${SLACK_CHANNEL:-}
+
+usage() {
+  echo "Usage: slack-ci -s SUMMARY  -m MESSAGE [ -f (i.e. failure) ] [-c CHANNEL_ID ]"
+  exit 2
+}
+
+while getopts "hfs:m:c:" OPTION; do
+    case $OPTION in
+    f)
+        is_success=0
+        ;;
+    s)
+        summary=$OPTARG
+        ;;
+    m)
+        message=$OPTARG
+        ;;
+    c)
+        channel=$OPTARG
+        ;;
+    h)
+        usage
+        ;;
+    *)
+        usage
+        ;;
+    esac
+done
+
+
+if [ "${summary:-}" == "" ]; then
+    echo "SUMMARY is required"
+    usage
+fi
+
+color="danger"
+if [ $is_success -eq 1 ]; then
+    color="good"
+fi
+
+json=$(\
+jq -n -c \
+    --arg channel "$channel" \
+    --arg summary "*$summary in <$repo_url|$repo>*" \
+    --arg message "$message" \
+    --arg branch "<$branch_url|$branch>" \
+    --arg commit "$commit" \
+    --arg headline "<$commit_url|$git_headline>" \
+    --arg actor "$actor" \
+    --arg color "$color" \
+    --arg run "<$run_url|$job>" \
+'{
+    channel: $channel,
+    text: $summary,
+    attachments: [{
+        color: $color,
+        text: $message,
+        fields: [
+            {
+                title: "Revision",
+                value: $headline,
+                short: true
+            },
+            {
+                title: "Author",
+                value: $actor,
+                short: true
+            },
+            {
+                title: "Workflow run",
+                value: $run,
+                short: true
+            },
+            {
+                title: "Branch",
+                value: $branch,
+                short: true
+            }
+        ]
+    }],
+    unfurl_links: false,
+    unfurl_media: false
+}')
+
+curl -X POST 'https://slack.com/api/chat.postMessage' \
+    -H 'Content-type: application/json' \
+    -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+    -d "$json"
+
+
+
+
