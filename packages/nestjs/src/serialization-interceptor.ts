@@ -2,14 +2,14 @@ import { CallHandler, ExecutionContext, NestInterceptor } from '@nestjs/common'
 import { Observable } from 'rxjs'
 import { map } from 'rxjs/operators'
 
-import { getOperaton } from './utils'
+import { getOperation } from './utils'
 
 export class SerializationInterceptor implements NestInterceptor {
   public intercept(
     context: ExecutionContext,
     next: CallHandler<any>
   ): Observable<any> | Promise<Observable<any>> {
-    const operation = getOperaton(context.getHandler())
+    const operation = getOperation(context.getHandler())
     if (!operation) {
       return next.handle()
     }
