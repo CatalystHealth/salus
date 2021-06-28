@@ -48,11 +48,6 @@ export interface SalusModuleOptionsFactory {
 @Module({
   providers: [
     {
-      provide: APP_INTERCEPTOR,
-      inject: [MODULE_OPTIONS_TOKEN],
-      useFactory: () => new SerializationInterceptor()
-    },
-    {
       provide: OperationRegistry,
       inject: [ModuleRef],
       useFactory: (module) => OperationRegistry.from(module)
