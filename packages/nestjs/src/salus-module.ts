@@ -8,14 +8,13 @@ import {
   RequestMethod,
   Type
 } from '@nestjs/common'
-import { APP_INTERCEPTOR, ModuleRef } from '@nestjs/core'
+import { ModuleRef } from '@nestjs/core'
 import { Operation } from '@salus-js/http'
 import { OpenAPIOptions, toOpenApi } from '@salus-js/openapi'
 import type { Request, Response } from 'express'
 
 import { MODULE_OPTIONS_TOKEN } from './constants'
 import { OperationRegistry } from './operation-registry'
-import { SerializationInterceptor } from './serialization-interceptor'
 
 export interface SalusModuleOptions {
   /**
@@ -47,11 +46,6 @@ export interface SalusModuleOptionsFactory {
 
 @Module({
   providers: [
-    {
-      provide: APP_INTERCEPTOR,
-      inject: [MODULE_OPTIONS_TOKEN],
-      useFactory: () => new SerializationInterceptor()
-    },
     {
       provide: OperationRegistry,
       inject: [ModuleRef],

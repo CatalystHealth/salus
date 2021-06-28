@@ -1,5 +1,6 @@
 export * from './salus-module'
 export * from './operation-registry'
 export * from './decorators'
+export * from './serialization-interceptor'
 export * from './types'
 export * from './utils'
