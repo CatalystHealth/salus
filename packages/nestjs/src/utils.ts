@@ -8,6 +8,6 @@ import { OPERATION_METADATA_KEY } from './constants'
  * @param method the method to check
  * @returns the associated operation if one exists
  */
-export function getOperaton(method: Function): Operation | null {
+export function getOperation(method: Function): Operation | null {
   return Reflect.getMetadata(OPERATION_METADATA_KEY, method) || null
 }

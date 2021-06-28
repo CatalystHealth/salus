@@ -11,7 +11,7 @@ import { Methods, Operation as ApiOperation } from '@salus-js/http'
 import type { Request } from 'express'
 
 import { OPERATION_METADATA_KEY } from './constants'
-import { getOperaton } from './utils'
+import { getOperation } from './utils'
 
 type DecoratorsMap = { [K in Methods]: (path: string) => MethodDecorator }
 const decoratorsMap: DecoratorsMap = {
@@ -45,7 +45,7 @@ export function Operation(operation: ApiOperation<any, any, any, any>): MethodDe
 /* eslint-disable @typescript-eslint/ban-types, @typescript-eslint/no-unsafe-call */
 export const Input = createParamDecorator((_data: void, ctx: ExecutionContext) => {
   const request: Request = ctx.switchToHttp().getRequest<Request>()
-  const operation = getOperaton(ctx.getHandler())
+  const operation = getOperation(ctx.getHandler())
   if (!operation) {
     throw new Error('Attempting to use @Input() on an non-operation controller')
   }
