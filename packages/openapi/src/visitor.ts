@@ -6,6 +6,7 @@ import { isReferenceObject, ReferenceObject, SchemaObject } from './openapi'
 
 interface SchemaVisitorOptions {
   readonly converters: SchemaConverter[]
+  readonly additionalConverters?: SchemaConverter[]
   readonly namedSchemaVisitor?: (
     name: string,
     generate: () => SchemaObject | ReferenceObject
@@ -13,17 +14,16 @@ interface SchemaVisitorOptions {
   readonly referenceRoot?: string
 }
 
-const defaultOptions: SchemaVisitorOptions = {
-  converters: defaultConverters
-}
-
 export class SchemaVisitor {
   private readonly options: SchemaVisitorOptions
 
   constructor(options: Partial<SchemaVisitorOptions> = {}) {
+    const additionalConverters = options.additionalConverters ?? []
+    const converters = options.converters ?? additionalConverters.concat(defaultConverters)
+
     this.options = {
-      ...defaultOptions,
-      ...options
+      ...options,
+      converters
     }
   }
 
