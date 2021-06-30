@@ -1,6 +1,7 @@
 import { Any } from '@salus-js/codec'
 import { Operation } from '@salus-js/http'
 
+import { SchemaConverter } from './converter'
 import {
   createJsonRequestFactory,
   createJsonResponseFactory,
@@ -32,6 +33,7 @@ export interface OpenAPIOptions {
   readonly responseBodyFactory?: ResponseFactory
   readonly operations: Operation[]
   readonly extraCodecs?: Any[]
+  readonly additionalConverters?: SchemaConverter[]
 }
 
 export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
@@ -42,6 +44,7 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     security = [],
     requestBodyFactory = createJsonRequestFactory(),
     responseBodyFactory = createJsonResponseFactory(),
+    additionalConverters,
     extraCodecs = [],
     operations,
     components
@@ -65,7 +68,8 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
         schemas[name] = {}
         schemas[name] = generate()
       }
-    }
+    },
+    additionalConverters
   })
 
   for (const operation of operations) {
