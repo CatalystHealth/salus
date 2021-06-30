@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/nestjs",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -27,7 +27,7 @@
     "@nestjs/core": "^7.6.15",
     "@salus-js/codec": "^0.9.1",
     "@salus-js/http": "^0.9.1",
-    "@salus-js/openapi": "^0.9.1",
+    "@salus-js/openapi": "^0.9.2",
     "@types/express": "^4.17.11",
     "express": "^4",
     "reflect-metadata": "^0.1.13",
