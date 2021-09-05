@@ -9,10 +9,13 @@ const emptyRefinements: Refinement<any, any>[] = []
 
 export interface CodecOptions<A> {
   /**
+   * Title to apply to this codec
+   */
+  readonly title?: string
+  /**
    * Description of the purpose of this codec
    */
   readonly description?: string
-
   /**
    * Exmaple of a typical value associated with this codec
    */
@@ -21,6 +24,10 @@ export interface CodecOptions<A> {
    * Array of all refinements to apply to the codec
    */
   readonly refinements?: Refinement<A, any>[]
+  /**
+   * Arbitrary additional data to attach to the codec
+   */
+  readonly extensions?: Record<string, unknown>
 }
 
 export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
@@ -90,7 +97,9 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
    * @param options the new options to attach to the codec
    * @returns a new codec with the attached options
    */
-  public document(options: Pick<CodecOptions<A>, 'description' | 'example'>): this {
+  public document(
+    options: Pick<CodecOptions<A>, 'title' | 'description' | 'example' | 'extensions'>
+  ): this {
     return this.with({
       ...this.options,
       ...options

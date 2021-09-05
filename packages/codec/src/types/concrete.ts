@@ -34,7 +34,9 @@ export class ConcreteCodec<A, O> extends Codec<A, O> {
     return new NullableCodec(this)
   }
 
-  public document(options: Pick<CodecOptions<A>, 'description' | 'example'>): ReferenceCodec<A, O> {
+  public document(
+    options: Pick<CodecOptions<A>, 'title' | 'description' | 'example' | 'extensions'>
+  ): ReferenceCodec<A, O> {
     return new ReferenceCodec(this, options)
   }
 
