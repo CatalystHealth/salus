@@ -153,6 +153,12 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
 
     documentedOperation.responses = responseBodyFactory(operation, visitor)
 
+    if (operation.options.extensions) {
+      for (const [key, value] of Object.entries(operation.options.extensions)) {
+        documentedOperation[`x-${key}`] = value
+      }
+    }
+
     const path = operation.formatPath(pathParameters)
     document.paths[path] ||= {}
     document.paths[path][operation.options.method] = documentedOperation
