@@ -50,7 +50,11 @@ export const Input = createParamDecorator((_data: void, ctx: ExecutionContext) =
     throw new Error('Attempting to use @Input() on an non-operation controller')
   }
 
-  const body = operation.decodeBody(request.body)
+  // If file(s) are on the request push them to the request body
+  const file = request.file ? {file: request.file} : undefined
+  const files = request.files ? {files: request.files} : undefined
+  const body = operation.decodeBody({...request.body, ...file, ...files})
+
   const params = operation.decodeParams(request.params)
   const query = operation.decodeQuery(request.query)
 
