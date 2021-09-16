@@ -64,16 +64,26 @@ export class SchemaVisitor {
 
     if (codec instanceof BaseCodec) {
       const additionalProperties: SchemaObject = {}
+      if (codec.options.title) {
+        additionalProperties.title = codec.options.title
+      }
+
       if (codec.options.description) {
         additionalProperties.description = codec.options.description
       }
 
-      if (codec.options.example) {
-        additionalProperties.example = codec.options.example
+      if (typeof codec.options.example !== 'undefined') {
+        additionalProperties.example = codec.encode(codec.options.example)
+      }
+
+      if (codec.options.extensions) {
+        for (const [key, value] of Object.entries(codec.options.extensions)) {
+          additionalProperties[`x-${key}`] = value
+        }
       }
 
       if (Object.keys(additionalProperties).length > 0) {
-        schema = isReferenceObject(schema) ? { oneOf: [schema] } : schema
+        schema = isReferenceObject(schema) ? { oneOf: [schema], 'x-wrapped': true } : schema
         return {
           ...schema,
           ...additionalProperties

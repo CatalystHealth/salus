@@ -45,6 +45,10 @@ export interface OperationOptions<
    * Codec for response payload
    */
   readonly response: TResponse
+  /**
+   * Arbitrary additional properties for the operation
+   */
+  readonly extensions?: Record<string, unknown>
 }
 
 export class Operation<
