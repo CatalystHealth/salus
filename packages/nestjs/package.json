@@ -30,7 +30,6 @@
     "@salus-js/openapi": "^0.10.0",
     "@types/express": "^4.17.13",
     "@types/multer": "^1.4.7",
-    "@types/express": "^4.17.11",
     "express": "^4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.0.0"
