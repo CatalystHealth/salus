@@ -28,7 +28,7 @@
     "@salus-js/codec": "^0.9.3",
     "@salus-js/http": "^0.9.3",
     "@salus-js/openapi": "^0.9.3",
-    "@types/express": "^4.17.11",
+    "@types/express": "^4.17.13",
     "@types/multer": "^1.4.7",
     "express": "^4",
     "reflect-metadata": "^0.1.13",
