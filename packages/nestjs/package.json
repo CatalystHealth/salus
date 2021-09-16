@@ -28,7 +28,6 @@
     "@salus-js/codec": "^0.9.3",
     "@salus-js/http": "^0.9.3",
     "@salus-js/openapi": "^0.9.3",
-    "@types/express": "^4.17.11",
     "express": "^4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.0.0"
@@ -39,6 +38,7 @@
     "@salus-js/codec": "*",
     "@salus-js/http": "*",
     "@salus-js/openapi": "*",
+    "@types/express": "^4.17.11",
     "rxjs": "*"
   },
   "publishConfig": {
