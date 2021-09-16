@@ -50,11 +50,15 @@ export const Input = createParamDecorator((_data: void, ctx: ExecutionContext) =
     throw new Error('Attempting to use @Input() on an non-operation controller')
   }
 
-  // If file(s) are on the request push them to the request body
-  const file = request.file ? { file: request.file } : undefined
-  const files = request.files ? { files: request.files } : undefined
-  const body = operation.decodeBody({ ...request.body, ...file, ...files })
+  /*
+   * If multer has put a file at request.file push it onto the request body at * request.body.fieldName.
+   *
+   * Multiple files are not currently supported. Their shape is also irregular
+   * They can be in a singular array or an object keyed by fieldName. In either * scenario multiple files can map to the same fieldName
+   */
+  const fieldNameMappedFiles = request.file ? { [request.file.fieldname]: request.file } : undefined
 
+  const body = operation.decodeBody({ ...request.body, ...fieldNameMappedFiles })
   const params = operation.decodeParams(request.params)
   const query = operation.decodeQuery(request.query)
 
