@@ -3,7 +3,7 @@ import { Operation } from '@salus-js/http'
 
 import { SchemaConverter } from './converter'
 import {
-  createJsonRequestFactory,
+  createRequestFactory,
   createJsonResponseFactory,
   RequestFactory,
   ResponseFactory
@@ -42,7 +42,7 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
     tags = [],
     servers = [],
     security = [],
-    requestBodyFactory = createJsonRequestFactory(),
+    requestBodyFactory = createRequestFactory(),
     responseBodyFactory = createJsonResponseFactory(),
     additionalConverters,
     extraCodecs = [],

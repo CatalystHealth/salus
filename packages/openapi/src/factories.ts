@@ -19,21 +19,12 @@ export function createJsonResponseFactory(): ResponseFactory {
   })
 }
 
-export function createJsonRequestFactory(): RequestFactory {
-  return (operation, visitor) => ({
-    content: {
-      'application/json': {
-        schema: operation.options.body ? visitor.convert(operation.options.body) : {}
-      }
-    }
-  })
-}
-
-export function createFormRequestFactory(): RequestFactory {
+export function createRequestFactory(): RequestFactory {
   return (operation, visitor) => {
+    const contentType = operation.options.contentType ?? 'application/json'
     return {
       content: {
-        'application/x-www-form-urlencoded': {
+        [contentType]: {
           schema: operation.options.body ? visitor.convert(operation.options.body) : {}
         }
       }
