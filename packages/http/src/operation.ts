@@ -1,9 +1,7 @@
 import { Any, Codec, OutputOf, TypeOf, Unknown, ValidationFailedError } from '@salus-js/codec'
 import { compile, PathFunction } from 'path-to-regexp'
 
-import { Methods } from './types'
-
-import { ContentType } from '.'
+import { ContentType, Methods } from './types'
 
 export interface OperationOptions<
   TParams extends Any = Unknown,
