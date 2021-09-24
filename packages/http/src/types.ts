@@ -21,3 +21,10 @@ export type BodyOf<T extends Operation> = T['_B']
  * Extracts the response type from an operation
  */
 export type ResponseOf<T extends Operation> = T['_R']
+
+export const contentTypes = [
+  'application/json',
+  'application-x-www-form-urlencoded',
+  'multipart/form-data'
+] as const
+export type ContentType = typeof contentTypes[number]
