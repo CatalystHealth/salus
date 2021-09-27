@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/openapi",
-  "version": "0.10.2",
+  "version": "0.10.3",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,8 +18,8 @@
     "README.md"
   ],
   "devDependencies": {
-    "@salus-js/codec": "^0.10.0",
-    "@salus-js/http": "^0.10.2"
+    "@salus-js/codec": "^0.10.3",
+    "@salus-js/http": "^0.10.3"
   },
   "peerDependencies": {
     "@salus-js/codec": "*",
