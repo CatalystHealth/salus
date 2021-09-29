@@ -1,7 +1,7 @@
 import { Context } from '../context'
 import { Any, OutputOf, TypeOf } from '../infer'
 import { isRecord, Optionalize, OptionalKeys } from '../utils'
-import { failure, ValidationError, Validation, failures, success } from '../validation'
+import { failure, failures, success, Validation, ValidationError } from '../validation'
 
 import { BaseCodec, CodecOptions, OptionalCodec } from './'
 
