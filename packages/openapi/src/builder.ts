@@ -112,7 +112,8 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
         return parameter
       })
 
-      documentedOperation.parameters ||= parameters
+      documentedOperation.parameters ||= []
+      documentedOperation.parameters.push(...parameters)
 
       for (const [name] of parameterEntries) {
         pathParameters[name] = `{${name}}`
@@ -144,7 +145,8 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
         }
       )
 
-      documentedOperation.parameters ||= parameters
+      documentedOperation.parameters ||= []
+      documentedOperation.parameters.push(...parameters)
     }
 
     if (operation.options.body) {
