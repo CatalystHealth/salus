@@ -174,7 +174,10 @@ export function toOpenApi(providedOptions: OpenAPIOptions): OpenAPIObject {
   }
 
   document.components ||= {}
-  document.components.schemas = schemas
+  // Sort the schemas alphabetically, which helps reduce diff noise if you are looking for changes in the API docs.
+  document.components.schemas = Object.fromEntries(
+    Object.entries(schemas).sort(([key1], [key2]) => key1.localeCompare(key2))
+  )
 
   return document
 }
