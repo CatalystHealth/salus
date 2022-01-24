@@ -7,16 +7,16 @@ export class StringCodec extends BaseCodec<string> {
   readonly _tag = 'StringCodec' as const
 
   private readonly trimString: boolean
-  public readonly notEmpty: boolean
+  public readonly rejectEmpty: boolean
 
   constructor(
     trimString: boolean = false,
-    notEmpty: boolean = true,
+    rejectEmpty: boolean = true,
     options: CodecOptions<string> = {}
   ) {
     super(options)
     this.trimString = trimString
-    this.notEmpty = notEmpty
+    this.rejectEmpty = rejectEmpty
   }
 
   protected doIs(value: unknown): value is string {
@@ -34,7 +34,7 @@ export class StringCodec extends BaseCodec<string> {
 
     const result = this.trimString ? value.trim() : value
 
-    if (this.notEmpty && result === '') {
+    if (this.rejectEmpty && result === '') {
       return failure(context, value, 'must not be empty')
     }
 
@@ -42,7 +42,7 @@ export class StringCodec extends BaseCodec<string> {
   }
 
   protected with(options: CodecOptions<string>): BaseCodec<string> {
-    return new StringCodec(this.trimString, this.notEmpty, options)
+    return new StringCodec(this.trimString, this.rejectEmpty, options)
   }
 
   public minLength(length: number, message?: string): StringCodec {
@@ -74,6 +74,6 @@ export class StringCodec extends BaseCodec<string> {
   }
 
   public trim(): StringCodec {
-    return new StringCodec(true, this.notEmpty, this.options)
+    return new StringCodec(true, this.rejectEmpty, this.options)
   }
 }
