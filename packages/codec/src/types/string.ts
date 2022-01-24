@@ -7,10 +7,10 @@ export class StringCodec extends BaseCodec<string> {
   readonly _tag = 'StringCodec' as const
 
   private readonly trimString: boolean
-  private readonly notEmpty: boolean
+  public readonly notEmpty: boolean
 
   constructor(
-    trimString: boolean = true,
+    trimString: boolean = false,
     notEmpty: boolean = true,
     options: CodecOptions<string> = {}
   ) {
@@ -73,7 +73,7 @@ export class StringCodec extends BaseCodec<string> {
     return new StringCodec(this.trimString, false, this.options)
   }
 
-  public doNotTrim(): StringCodec {
-    return new StringCodec(false, this.notEmpty, this.options)
+  public trim(): StringCodec {
+    return new StringCodec(true, this.notEmpty, this.options)
   }
 }

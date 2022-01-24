@@ -27,20 +27,15 @@ describe('String Codec', () => {
       'hello',
       'hello'
     ),
-    decodeSuccessExpectation('trims string by default', codec, ' hello ', 'hello'),
-    decodeSuccessExpectation('does not trim on override', codec.doNotTrim(), ' hello ', ' hello '),
-    decodeSuccessExpectation(
-      'allows blank string trimmed as empty on override',
-      codec.allowEmpty(),
-      ' ',
-      ''
-    ),
+    decodeSuccessExpectation('does not trim string by default', codec, ' hello ', ' hello '),
+    decodeSuccessExpectation('trims on override', codec.trim(), ' hello ', 'hello'),
+    decodeSuccessExpectation('allows blank string by default', codec, ' ', ' '),
     decodeSuccessExpectation('allows empty string on override', codec.allowEmpty(), '', ''),
     decodeSuccessExpectation(
-      'allows blank string when trim and empty both overriden',
-      codec.doNotTrim().allowEmpty(),
+      'allows blank string as empty string when trim and empty both overriden',
+      codec.trim().allowEmpty(),
       ' ',
-      ' '
+      ''
     ),
     decodeFailureExpectation('not parse numbers', codec, 1, ['', 'must be a string']),
     decodeFailureExpectation('not parse booleans', codec, false, ['', 'must be a string']),
@@ -48,7 +43,7 @@ describe('String Codec', () => {
       '',
       'must not be empty'
     ]),
-    decodeFailureExpectation('does not allow blank string by default', codec, ' ', [
+    decodeFailureExpectation('does not allow blank string when trimmed', codec.trim(), ' ', [
       '',
       'must not be empty'
     ]),

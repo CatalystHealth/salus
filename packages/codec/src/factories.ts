@@ -26,6 +26,7 @@ import { UnionCodec } from './types/union'
 const boolean = new BooleanCodec()
 const number = new NumberCodec()
 const string = new StringCodec()
+const trimmedString = new StringCodec().trim()
 const nullType = new NullCodec()
 const unknown = new UnknownCodec()
 const undefinedType = new UndefinedCodec()
@@ -99,6 +100,7 @@ export {
   partial,
   record,
   string,
+  trimmedString,
   tuple,
   undefinedType as undefined,
   unknown,
