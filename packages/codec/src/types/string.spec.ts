@@ -37,7 +37,7 @@ describe('String Codec', () => {
     ),
     decodeSuccessExpectation('allows empty string on override', codec.allowEmpty(), '', ''),
     decodeSuccessExpectation(
-      'allows blank string on double override',
+      'allows blank string when trim and empty both overriden',
       codec.doNotTrim().allowEmpty(),
       ' ',
       ' '
