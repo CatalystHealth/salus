@@ -27,11 +27,34 @@ describe('String Codec', () => {
       'hello',
       'hello'
     ),
+    decodeSuccessExpectation('trims string by default', codec, ' hello ', 'hello'),
+    decodeSuccessExpectation('does not trim on override', codec.doNotTrim(), ' hello ', ' hello '),
+    decodeSuccessExpectation(
+      'allows blank string trimmed as empty on override',
+      codec.allowEmpty(),
+      ' ',
+      ''
+    ),
+    decodeSuccessExpectation('allows empty string on override', codec.allowEmpty(), '', ''),
+    decodeSuccessExpectation(
+      'allows blank string on double override',
+      codec.doNotTrim().allowEmpty(),
+      ' ',
+      ' '
+    ),
     decodeFailureExpectation('not parse numbers', codec, 1, ['', 'must be a string']),
     decodeFailureExpectation('not parse booleans', codec, false, ['', 'must be a string']),
-    decodeFailureExpectation('respect minLength', codec.minLength(1), '', [
+    decodeFailureExpectation('does not allow empty string by default', codec, '', [
       '',
-      'must be at least 1 characters'
+      'must not be empty'
+    ]),
+    decodeFailureExpectation('does not allow blank string by default', codec, ' ', [
+      '',
+      'must not be empty'
+    ]),
+    decodeFailureExpectation('respect minLength', codec.minLength(2), 'a', [
+      '',
+      'must be at least 2 characters'
     ]),
     decodeFailureExpectation('respect maxLength', codec.maxLength(1), 'asdf', [
       '',
