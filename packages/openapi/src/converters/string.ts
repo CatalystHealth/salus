@@ -5,7 +5,6 @@ import { mapRefinement } from './utils'
 
 export const StringConverter = SimpleConverter.for(StringCodec, (codec) => ({
   type: 'string',
-  ...(codec.rejectEmpty ? { minLength: 1 } : {}),
   ...mapRefinement<number>(codec, 'minLength', (minLength) => ({
     minLength
   })),

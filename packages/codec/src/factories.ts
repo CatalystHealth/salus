@@ -26,13 +26,17 @@ import { UnionCodec } from './types/union'
 const boolean = new BooleanCodec()
 const number = new NumberCodec()
 const string = new StringCodec()
-const trimmedString = new StringCodec().trim()
 const nullType = new NullCodec()
 const unknown = new UnknownCodec()
 const undefinedType = new UndefinedCodec()
 
 const isoDate = new IsoDateCodec()
 const isoDateTime = new IsoDateTimeCodec()
+
+/**
+ * Helpful factory for accepting string input
+ */
+const notBlankString = new StringCodec().trim().notEmpty()
 
 function enumFactory<T extends string>(value: Record<string, T> | ReadonlyArray<T>): EnumCodec<T> {
   return new EnumCodec(value)
@@ -94,13 +98,13 @@ export {
   lazy,
   literal,
   named,
+  notBlankString,
   nullType as null,
   number,
   object,
   partial,
   record,
   string,
-  trimmedString,
   tuple,
   undefinedType as undefined,
   unknown,

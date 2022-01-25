@@ -7,16 +7,10 @@ export class StringCodec extends BaseCodec<string> {
   readonly _tag = 'StringCodec' as const
 
   private readonly trimString: boolean
-  public readonly rejectEmpty: boolean
 
-  constructor(
-    trimString: boolean = false,
-    rejectEmpty: boolean = true,
-    options: CodecOptions<string> = {}
-  ) {
+  constructor(trimString: boolean = false, options: CodecOptions<string> = {}) {
     super(options)
     this.trimString = trimString
-    this.rejectEmpty = rejectEmpty
   }
 
   protected doIs(value: unknown): value is string {
@@ -32,17 +26,15 @@ export class StringCodec extends BaseCodec<string> {
       return failure(context, value, 'must be a string')
     }
 
-    const result = this.trimString ? value.trim() : value
-
-    if (this.rejectEmpty && result === '') {
-      return failure(context, value, 'must not be empty')
-    }
-
-    return success(result)
+    return success(this.trimString ? value.trim() : value)
   }
 
   protected with(options: CodecOptions<string>): BaseCodec<string> {
-    return new StringCodec(this.trimString, this.rejectEmpty, options)
+    return new StringCodec(this.trimString, options)
+  }
+
+  public notEmpty(message?: string): StringCodec {
+    return this.minLength(1, message ?? 'must not be empty')
   }
 
   public minLength(length: number, message?: string): StringCodec {
@@ -69,11 +61,7 @@ export class StringCodec extends BaseCodec<string> {
     })
   }
 
-  public allowEmpty(): StringCodec {
-    return new StringCodec(this.trimString, false, this.options)
-  }
-
   public trim(): StringCodec {
-    return new StringCodec(true, this.rejectEmpty, this.options)
+    return new StringCodec(true, this.options)
   }
 }
