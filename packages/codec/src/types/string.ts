@@ -6,6 +6,13 @@ import { BaseCodec, CodecOptions } from './'
 export class StringCodec extends BaseCodec<string> {
   readonly _tag = 'StringCodec' as const
 
+  private readonly trimString: boolean
+
+  constructor(trimString: boolean = false, options: CodecOptions<string> = {}) {
+    super(options)
+    this.trimString = trimString
+  }
+
   protected doIs(value: unknown): value is string {
     return typeof value === 'string'
   }
@@ -19,11 +26,11 @@ export class StringCodec extends BaseCodec<string> {
       return failure(context, value, 'must be a string')
     }
 
-    return success(value)
+    return success(this.trimString ? value.trim() : value)
   }
 
   protected with(options: CodecOptions<string>): BaseCodec<string> {
-    return new StringCodec(options)
+    return new StringCodec(this.trimString, options)
   }
 
   public notEmpty(message?: string): StringCodec {
@@ -52,5 +59,9 @@ export class StringCodec extends BaseCodec<string> {
       arguments: pattern,
       message: message ?? `must match ${pattern.source}`
     })
+  }
+
+  public trim(): StringCodec {
+    return new StringCodec(true, this.options)
   }
 }
