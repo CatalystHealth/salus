@@ -1,16 +1,15 @@
 import { Context } from '../context'
 import { failure, success, Validation } from '../validation'
 
+import { NullableCodec } from './nullable'
+
 import { BaseCodec, CodecOptions } from './'
 
 export class StringCodec extends BaseCodec<string> {
   readonly _tag = 'StringCodec' as const
 
-  private readonly trimString: boolean
-
-  constructor(trimString: boolean = false, options: CodecOptions<string> = {}) {
+  constructor(options: CodecOptions<string> = {}) {
     super(options)
-    this.trimString = trimString
   }
 
   protected doIs(value: unknown): value is string {
@@ -26,11 +25,11 @@ export class StringCodec extends BaseCodec<string> {
       return failure(context, value, 'must be a string')
     }
 
-    return success(this.trimString ? value.trim() : value)
+    return success(value)
   }
 
   protected with(options: CodecOptions<string>): BaseCodec<string> {
-    return new StringCodec(this.trimString, options)
+    return new StringCodec(options)
   }
 
   public notEmpty(message?: string): StringCodec {
@@ -62,6 +61,12 @@ export class StringCodec extends BaseCodec<string> {
   }
 
   public trim(): StringCodec {
-    return new StringCodec(true, this.options)
+    return this.preprocess((value) => (typeof value === 'string' ? value.trim() : value))
+  }
+
+  public trimToNull(): NullableCodec<string, string> {
+    return this.nullable().preprocess((value) =>
+      typeof value === 'string' ? value.trim() || null : value
+    )
   }
 }
