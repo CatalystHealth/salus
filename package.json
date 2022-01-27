@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/root",
-  "version": "0.12.1",
+  "version": "0.4.3",
   "license": "MIT",
   "private": true,
   "workspaces": [
