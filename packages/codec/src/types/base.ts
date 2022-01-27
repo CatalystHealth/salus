@@ -1,11 +1,13 @@
 import { Codec } from '../codec'
 import { Context } from '../context'
+import { Preprocessor } from '../preprocess'
 import { Constraint, Refinement, RefinementOptions } from '../refinement'
 import { failure, Validation } from '../validation'
 
 import { NullableCodec, OptionalCodec } from './'
 
 const emptyRefinements: Refinement<any, any>[] = []
+const emptyProcessors: Preprocessor[] = []
 
 export interface CodecOptions<A> {
   /**
@@ -24,6 +26,10 @@ export interface CodecOptions<A> {
    * Array of all refinements to apply to the codec
    */
   readonly refinements?: Refinement<A, any>[]
+  /**
+   * Array of all preprocessors on the codec
+   */
+  readonly preprocessors?: Preprocessor[]
   /**
    * Arbitrary additional data to attach to the codec
    */
@@ -50,7 +56,12 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
   }
 
   public decode(value: unknown, context: Context = Context.create(this)): Validation<A> {
-    const result = this.doDecode(value, context)
+    const valueToProcess = (this.options.preprocessors ?? emptyProcessors).reduce(
+      (value, processor) => processor(value),
+      value
+    )
+
+    const result = this.doDecode(valueToProcess, context)
     if (!result.success) {
       return result
     }
@@ -88,6 +99,19 @@ export abstract class BaseCodec<A, O = A> extends Codec<A, O> {
           ...overrideOptions
         }
       ]
+    }) as this
+  }
+
+  /**
+   * Builds a new codec with an additional preprocessor applied
+   *
+   * @param processor the preprocessor to add to the list
+   * @returns a new codec with the processor applied
+   */
+  public preprocess(processor: Preprocessor): this {
+    return this.with({
+      ...this.options,
+      preprocessors: [...(this.options.preprocessors || emptyProcessors), processor]
     }) as this
   }
 

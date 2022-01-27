@@ -7,10 +7,11 @@ export function mapRefinement<P>(
   type: string,
   handler: (refinement: P) => Partial<SchemaObject>
 ): Partial<SchemaObject> {
-  const refinement = codec.options.refinements?.find((refinement) => refinement.type === type)
-  if (!refinement) {
-    return {}
-  }
-
-  return handler(refinement.arguments)
+  return (
+    codec.options.refinements?.reduce(
+      (extensions, refinement) =>
+        refinement.type === type ? { ...extensions, ...handler(refinement.arguments) } : extensions,
+      {}
+    ) ?? {}
+  )
 }

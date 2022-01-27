@@ -30,6 +30,7 @@ describe('String Codec', () => {
     decodeSuccessExpectation('does not trim string by default', codec, ' hello ', ' hello '),
     decodeSuccessExpectation('trims on override', codec.trim(), ' hello ', 'hello'),
     decodeSuccessExpectation('trims before refinements', codec.trim().maxLength(2), ' a ', 'a'),
+    decodeSuccessExpectation('trims to null', codec.trimToNull(), '      ', null),
     decodeFailureExpectation('not parse numbers', codec, 1, ['', 'must be a string']),
     decodeFailureExpectation('not parse booleans', codec, false, ['', 'must be a string']),
     decodeSuccessExpectation('allow empty string by default', codec, '', ''),
