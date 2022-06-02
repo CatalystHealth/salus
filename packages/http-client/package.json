@@ -39,11 +39,11 @@
   "devDependencies": {
     "@salus-js/codec": "^0.14.1",
     "@salus-js/http": "^0.14.1",
-    "axios": "^0.21.1"
+    "axios": "^0.27.2"
   },
   "peerDependencies": {
     "@salus-js/codec": "*",
     "@salus-js/http": "*",
-    "axios": "^0.21.1"
+    "axios": "^0.27.2"
   }
 }
