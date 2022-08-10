@@ -48,5 +48,5 @@ export const http = {
   put: createOperationHandler('put', true),
   post: createOperationHandler('post', true),
   patch: createOperationHandler('patch', false),
-  delete: createOperationHandler('delete', false)
+  delete: createOperationHandler('delete', true)
 }
