@@ -1,6 +1,6 @@
 {
   "name": "@salus-js/http-client",
-  "version": "0.15.0",
+  "version": "0.15.1",
   "license": "MIT",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -38,7 +38,7 @@
   "gitHead": "9153d423f6d2416bbfb957f312379c2d9ad73547",
   "devDependencies": {
     "@salus-js/codec": "^0.15.0",
-    "@salus-js/http": "^0.15.0",
+    "@salus-js/http": "^0.15.1",
     "axios": "^0.27.2"
   },
   "peerDependencies": {
